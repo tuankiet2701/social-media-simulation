@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:provider/provider.dart';
@@ -8,9 +7,9 @@ import 'package:social_media_simulation/components/password_text_field.dart';
 import 'package:social_media_simulation/components/text_form_builder.dart';
 import 'package:social_media_simulation/screens/forgot_password_screen/forgot_password_screen.dart';
 import 'package:social_media_simulation/screens/login_screen/login_model/login_model.dart';
+import 'package:social_media_simulation/screens/register_screen/register_screen.dart';
 import 'package:social_media_simulation/utils/validation.dart';
 import 'package:social_media_simulation/widgets/indicator.dart';
-import 'package:social_media_simulation/widgets/showInSnackbar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,48 +25,72 @@ class _LoginScreenState extends State<LoginScreen> {
     return LoadingOverlay(
       progressIndicator: circularProgress(context),
       isLoading: loginModel.loading,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        key: loginModel.scaffoldKey,
-        body: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-          children: [
-            SizedBox(height: MediaQuery.of(context).size.height / 5),
-            Container(
-              height: 170,
-              width: MediaQuery.of(context).size.width,
-              child: Image.asset(
-                'assets/images/new1.png',
-              ),
-            ),
-            const Center(
-              child: Text(
-                'Welcome Back!',
-                style: TextStyle(
-                  fontSize: 23,
-                  fontWeight: FontWeight.w900,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          key: loginModel.scaffoldKey,
+          body: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height / 8),
+              Container(
+                height: 170,
+                width: MediaQuery.of(context).size.width,
+                child: Image.asset(
+                  'assets/images/new1.png',
                 ),
               ),
-            ),
-            Center(
-              child: Text(
-                'Login your account and get started!',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w300,
-                  color: Theme.of(context).colorScheme.secondary,
+              const Center(
+                child: Text(
+                  'Welcome Back!',
+                  style: TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 25),
-            buildForm(context, loginModel),
-          ],
+              Center(
+                child: Text(
+                  'Login your account and get started!',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w300,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30),
+              buildForm(loginModel, context),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Don\'t have an account?'),
+                  const SizedBox(width: 5),
+                  GestureDetector(
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    onTap: () => Navigator.of(context).pushReplacement(
+                      CupertinoPageRoute(
+                        builder: (_) => RegisterScreen(),
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  buildForm(BuildContext context, LoginModel loginModel) {
+  buildForm(LoginModel loginModel, BuildContext context) {
     return Form(
       key: loginModel.formKey,
       child: Column(

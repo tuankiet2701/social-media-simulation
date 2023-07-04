@@ -1,9 +1,8 @@
 class Validations {
   static String? validateName(String? value) {
     if (value!.isEmpty) return 'Username is Required.';
-    final RegExp nameExp = new RegExp(r'^[A-za-zğüşöçİĞÜŞÖÇ ]+$');
-    if (!nameExp.hasMatch(value))
-      return 'Please enter only alphabetical characters.';
+    final RegExp nameExp = new RegExp(r'^[a-zA-Z0-9._]{1,20}$');
+    if (!nameExp.hasMatch(value)) return 'Username is too short';
   }
 
   static String? validateEmail(String? value, [bool isRequried = true]) {
@@ -14,7 +13,6 @@ class Validations {
   }
 
   static String? validatePassword(String? value) {
-    if (value!.isEmpty || value.length < 6)
-      return 'Please enter a valid password.';
+    if (value!.isEmpty || value.length < 6) return 'Password is too short';
   }
 }

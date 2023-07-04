@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_simulation/firebase_options.dart';
+import 'package:social_media_simulation/screens/landing_screen/landing_screen.dart';
 import 'package:social_media_simulation/screens/login_screen/login_screen.dart';
 import 'package:social_media_simulation/theme/theme_view.dart';
 import 'package:social_media_simulation/utils/constants.dart';
@@ -14,7 +16,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  // SystemChrome.setEnabledSystemUIOverlays([]);
   runApp(const MyApp());
 }
 
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
             theme: themeData(
               notifier.dark ? Constants.darkTheme : Constants.lightTheme,
             ),
-            home: LoginScreen(),
+            home: LandingScreen(),
           );
         },
       ),
