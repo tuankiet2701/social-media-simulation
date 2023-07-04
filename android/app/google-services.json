@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "287721089942",
+    "project_id": "milo-b6204",
+    "storage_bucket": "milo-b6204.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287721089942:android:ba24ba469a59ec94168bb7",
+        "android_client_info": {
+          "package_name": "com.example.social_media"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "287721089942-cs8dl42r5oose5pmo4bs5po60boi5n23.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWau_yillASR88l9RDgFE3EOSuncsx94g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "287721089942-cs8dl42r5oose5pmo4bs5po60boi5n23.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287721089942:android:87fda368f0684933168bb7",
+        "android_client_info": {
+          "package_name": "com.example.social_media_simulation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "287721089942-cs8dl42r5oose5pmo4bs5po60boi5n23.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWau_yillASR88l9RDgFE3EOSuncsx94g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "287721089942-cs8dl42r5oose5pmo4bs5po60boi5n23.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
