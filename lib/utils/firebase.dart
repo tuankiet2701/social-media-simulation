@@ -10,3 +10,11 @@ final Uuid uuid = Uuid();
 
 //collection refs
 CollectionReference usersRef = firestore.collection('users');
+CollectionReference followersRef = firestore.collection('followers');
+CollectionReference followingRef = firestore.collection('following');
+CollectionReference postRef = firestore.collection('posts');
+CollectionReference notificationRef = firestore.collection('notifications');
+CollectionReference storyRef = firestore.collection('posts');
+
+//storage refs
+Reference profilePic = storage.ref().child('profilePic');

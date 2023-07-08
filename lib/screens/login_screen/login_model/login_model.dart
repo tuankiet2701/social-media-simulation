@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:social_media_simulation/screens/tab_screen/tab_screen.dart';
+import 'package:social_media_simulation/screens/edit_profile_screen/edit_profile_screen.dart';
+import 'package:social_media_simulation/screens/main_screen/main_screen.dart';
+import 'package:social_media_simulation/screens/profile_screen/profile_screen.dart';
 import 'package:social_media_simulation/services/auth_service.dart';
 import 'package:social_media_simulation/widgets/showInSnackbar.dart';
 
@@ -32,7 +34,7 @@ class LoginModel extends ChangeNotifier {
         if (success) {
           Navigator.of(context).pushReplacement(
             CupertinoPageRoute(
-              builder: (_) => TabScreen(),
+              builder: (_) => MainScreen(),
             ),
           );
         }

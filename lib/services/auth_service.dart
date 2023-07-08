@@ -33,8 +33,7 @@ class AuthService {
       'time': Timestamp.now(),
       'id': user.uid,
       'bio': "",
-      'photoUrl': user.photoURL ??
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Faenza-avatar-default-symbolic.svg/2048px-Faenza-avatar-default-symbolic.svg.png',
+      'photoUrl': user.photoURL,
       'gender': '',
     });
   }

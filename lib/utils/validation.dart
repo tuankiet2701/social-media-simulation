@@ -2,7 +2,7 @@ class Validations {
   static String? validateName(String? value) {
     if (value!.isEmpty) return 'Username is Required.';
     final RegExp nameExp = new RegExp(r'^[a-zA-Z0-9._]{1,20}$');
-    if (!nameExp.hasMatch(value)) return 'Username is too short';
+    if (!nameExp.hasMatch(value)) return 'Invalid Username';
   }
 
   static String? validateEmail(String? value, [bool isRequried = true]) {

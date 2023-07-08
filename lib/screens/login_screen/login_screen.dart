@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
           body: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
             children: [
-              SizedBox(height: MediaQuery.of(context).size.height / 8),
+              SizedBox(height: MediaQuery.of(context).size.height / 10),
               Container(
                 height: 170,
                 width: MediaQuery.of(context).size.width,
@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Don\'t have an account?'),
+                  const Text('Don\'t have an account?'),
                   const SizedBox(width: 5),
                   GestureDetector(
                     child: Text(
@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     onTap: () => Navigator.of(context).pushReplacement(
                       CupertinoPageRoute(
-                        builder: (_) => RegisterScreen(),
+                        builder: (_) => const RegisterScreen(),
                       ),
                     ),
                   )

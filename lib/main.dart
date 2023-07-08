@@ -6,7 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:social_media_simulation/firebase_options.dart';
 import 'package:social_media_simulation/screens/landing_screen/landing_screen.dart';
 import 'package:social_media_simulation/screens/login_screen/login_screen.dart';
-import 'package:social_media_simulation/theme/theme_view.dart';
+import 'package:social_media_simulation/screens/main_screen/main_screen.dart';
+import 'package:social_media_simulation/view_model/theme_view.dart';
 import 'package:social_media_simulation/utils/constants.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
 import 'package:social_media_simulation/utils/provider.dart';
@@ -36,7 +37,16 @@ class MyApp extends StatelessWidget {
             theme: themeData(
               notifier.dark ? Constants.darkTheme : Constants.lightTheme,
             ),
-            home: LandingScreen(),
+            home: StreamBuilder(
+              stream: firebaseAuth.authStateChanges(),
+              builder: (BuildContext context, snapshot) {
+                if (snapshot.hasData) {
+                  return const MainScreen();
+                } else {
+                  return const LandingScreen();
+                }
+              },
+            ),
           );
         },
       ),
