@@ -14,7 +14,10 @@ CollectionReference followersRef = firestore.collection('followers');
 CollectionReference followingRef = firestore.collection('following');
 CollectionReference postRef = firestore.collection('posts');
 CollectionReference notificationRef = firestore.collection('notifications');
+CollectionReference commentRef = firestore.collection('comments');
 CollectionReference storyRef = firestore.collection('posts');
 
 //storage refs
 Reference profilePic = storage.ref().child('profilePic');
+Reference posts = storage.ref().child('posts');
+Reference status = storage.ref().child('status');

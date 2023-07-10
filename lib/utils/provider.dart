@@ -6,6 +6,7 @@ import 'package:social_media_simulation/screens/login_screen/login_model/login_m
 import 'package:social_media_simulation/screens/register_screen/register_model/register_model.dart';
 import 'package:social_media_simulation/view_model/status_view_model.dart';
 import 'package:social_media_simulation/view_model/theme_view.dart';
+import 'package:social_media_simulation/screens/post_screen/post_view_model/post_view_model.dart';
 
 List<SingleChildWidget> providers = [
   ChangeNotifierProvider(create: (_) => LoginModel()),
@@ -14,4 +15,5 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider(create: (_) => ForgotPasswordModel()),
   ChangeNotifierProvider(create: (_) => EditProfileModel()),
   ChangeNotifierProvider(create: (_) => StatusViewModel()),
+  ChangeNotifierProvider(create: (_) => PostViewModel()),
 ];

@@ -33,7 +33,8 @@ class AuthService {
       'time': Timestamp.now(),
       'id': user.uid,
       'bio': "",
-      'photoUrl': user.photoURL,
+      'photoUrl':
+          'https://cdn1.iconfinder.com/data/icons/user-pictures/100/unknown-512.png',
       'gender': '',
     });
   }
