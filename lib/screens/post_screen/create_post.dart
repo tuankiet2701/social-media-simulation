@@ -218,7 +218,7 @@ class _CreatePostState extends State<CreatePost> {
                   title: Text('Gallery'),
                   onTap: () {
                     Navigator.pop(context);
-                    viewModel.pickImage();
+                    viewModel.pickImage(camera: false);
                   },
                 ),
               ],

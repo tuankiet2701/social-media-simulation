@@ -5,6 +5,7 @@ import 'package:social_media_simulation/utils/file_utils.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
 
 abstract class Service {
+  //function to upload image to firebase storage and retrieve the url
   Future<String> uploadImage(Reference ref, File file) async {
     String ext = FileUtils.getFileExtension(file);
     Reference storageReference = ref.child("${uuid.v4()}.$ext");

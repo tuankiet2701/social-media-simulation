@@ -4,11 +4,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:social_media_simulation/components/stream_grid_wrapper.dart';
+import 'package:social_media_simulation/models/post.dart';
 import 'package:social_media_simulation/models/user.dart';
 import 'package:social_media_simulation/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:social_media_simulation/screens/login_screen/login_screen.dart';
+import 'package:social_media_simulation/screens/profile_screen/list_posts/list_posts.dart';
 import 'package:social_media_simulation/screens/setting_screen/setting_screen.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
+import 'package:social_media_simulation/widgets/post_tile.dart';
 
 class ProfileScreen extends StatefulWidget {
   final profileId;
@@ -358,8 +362,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                if (index > 0) return null;
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          const Text(
+                            'All Posts',
+                            style: TextStyle(fontWeight: FontWeight.w900),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                            onPressed: () async {
+                              DocumentSnapshot doc =
+                                  await usersRef.doc(widget.profileId).get();
+                              var currentUser = UserModel.fromJson(
+                                  doc.data() as Map<String, dynamic>);
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => ListPosts(
+                                    userId: widget.profileId,
+                                    username: currentUser.username,
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: Icon(Ionicons.grid_outline),
+                          ),
+                        ],
+                      ),
+                    ),
+                    buildPostView(),
+                  ],
+                );
+              },
+            ),
+          ),
         ],
       ),
+    );
+  }
+
+  buildPostView() {
+    return buildGridPost();
+  }
+
+  buildGridPost() {
+    return StreamGridWrapper(
+      shrinkWrap: true,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      stream: postRef
+          .where('ownerId', isEqualTo: widget.profileId)
+          .orderBy('timestamp', descending: true)
+          .snapshots(),
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (_, DocumentSnapshot snapshot) {
+        PostModel posts =
+            PostModel.fromJson(snapshot.data() as Map<String, dynamic>);
+        return PostTile(post: posts);
+      },
     );
   }
 

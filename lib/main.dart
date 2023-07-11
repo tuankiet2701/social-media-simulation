@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:social_media_simulation/components/life_cycle_event_handler.dart';
 import 'package:social_media_simulation/firebase_options.dart';
 import 'package:social_media_simulation/screens/landing_screen/landing_screen.dart';
 import 'package:social_media_simulation/screens/login_screen/login_screen.dart';
 import 'package:social_media_simulation/screens/main_screen/main_screen.dart';
+import 'package:social_media_simulation/services/user_service.dart';
 import 'package:social_media_simulation/view_model/theme_view.dart';
 import 'package:social_media_simulation/utils/constants.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
@@ -21,8 +23,22 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(LifeCycleEventHandler(
+      detachedCallBack: () => UserService().setUserStatus(false),
+      resumeCallBack: () => UserService().setUserStatus(false),
+    ));
+  }
 
   // This widget is the root of your application.
   @override

@@ -5,6 +5,7 @@ import 'package:social_media_simulation/models/post.dart';
 import 'package:social_media_simulation/utils/constants.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
 import 'package:social_media_simulation/widgets/indicator.dart';
+import 'package:social_media_simulation/widgets/user_post.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -87,7 +88,7 @@ class _FeedScreenState extends State<FeedScreen> {
                               PostModel.fromJson(docs[index].data());
                           return Padding(
                             padding: const EdgeInsets.all(10),
-                            child: Container(),
+                            child: UserPost(post: posts),
                           );
                         },
                       );

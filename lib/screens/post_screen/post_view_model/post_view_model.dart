@@ -12,6 +12,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:social_media_simulation/utils/constants.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
+import 'package:social_media_simulation/widgets/showInSnackbar.dart';
 
 class PostViewModel extends ChangeNotifier {
   //services
@@ -114,7 +115,6 @@ class PostViewModel extends ChangeNotifier {
     } catch (e) {
       loading = false;
       notifyListeners();
-      showInSnackBar('Cancelled', context);
     }
   }
 
@@ -147,6 +147,7 @@ class PostViewModel extends ChangeNotifier {
       loading = true;
       notifyListeners();
       await postService.uploadPost(mediaUrl!, location!, description!);
+      showInSnackBar('Uploaded Successfully!', context);
       loading = false;
       resetPost();
       notifyListeners();
@@ -154,7 +155,7 @@ class PostViewModel extends ChangeNotifier {
       print(e);
       loading = false;
       resetPost();
-      showInSnackBar('Uploaded Successfully!', context);
+      showInSnackBar('Upload Failed!', context);
       notifyListeners();
     }
   }
@@ -192,10 +193,5 @@ class PostViewModel extends ChangeNotifier {
     location = null;
     edit = false;
     notifyListeners();
-  }
-
-  void showInSnackBar(String value, context) {
-    ScaffoldMessenger.of(context).removeCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value)));
   }
 }

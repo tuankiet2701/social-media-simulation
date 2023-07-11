@@ -32,13 +32,13 @@ class EditProfileModel extends ChangeNotifier {
   }
 
   setBio(String val) {
-    print('SetBio$val');
+    print('SetBio $val');
     bio = val;
     notifyListeners();
   }
 
   setUsername(String val) {
-    print('SetUsername$val');
+    print('SetUsername $val');
     username = val;
     notifyListeners();
   }
@@ -107,7 +107,6 @@ class EditProfileModel extends ChangeNotifier {
     } catch (e) {
       loading = false;
       notifyListeners();
-      showInSnackBar('Cancelled', context);
     }
   }
 
