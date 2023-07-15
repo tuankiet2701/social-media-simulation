@@ -42,7 +42,10 @@ class _CommentScreenState extends State<CommentScreen> {
           child: const Icon(Ionicons.chevron_back),
         ),
         centerTitle: true,
-        title: Text('Comments'),
+        title: const Text(
+          'Comments',
+          style: TextStyle(fontWeight: FontWeight.w900),
+        ),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -255,33 +258,31 @@ class _CommentScreenState extends State<CommentScreen> {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Text(
-                        timeago.format(widget.post!.timestamp!.toDate()),
-                      ),
-                      const SizedBox(width: 3),
-                      StreamBuilder(
-                        stream: likesRef
-                            .where('postId', isEqualTo: widget.post!.postId)
-                            .snapshots(),
-                        builder:
-                            (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                          if (snapshot.hasData) {
-                            QuerySnapshot snap = snapshot.data!;
-                            List<DocumentSnapshot> docs = snap.docs;
-                            return buildLikesCount(context, docs.length);
-                          } else {
-                            return buildLikesCount(context, 0);
-                          }
-                        },
-                      ),
-                    ],
+                  Text(
+                    timeago.format(widget.post!.timestamp!.toDate()),
                   ),
                 ],
               ),
               const Spacer(),
-              buildLikeButton(),
+              Column(
+                children: [
+                  buildLikeButton(),
+                  StreamBuilder(
+                    stream: likesRef
+                        .where('postId', isEqualTo: widget.post!.postId)
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasData) {
+                        QuerySnapshot snap = snapshot.data!;
+                        List<DocumentSnapshot> docs = snap.docs;
+                        return buildLikesCount(context, docs.length);
+                      } else {
+                        return buildLikesCount(context, 0);
+                      }
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -294,7 +295,7 @@ class _CommentScreenState extends State<CommentScreen> {
       padding: const EdgeInsets.only(left: 7.0),
       child: Text(
         '$count likes',
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 10.0,
         ),
@@ -332,8 +333,8 @@ class _CommentScreenState extends State<CommentScreen> {
           return LikeButton(
             onTap: onLikeButtonTapped,
             size: 25.0,
-            circleColor: CircleColor(
-                start: const Color(0xffFFC0CB), end: Color(0xffff0000)),
+            circleColor: const CircleColor(
+                start: Color(0xffFFC0CB), end: Color(0xffff0000)),
             bubblesColor: const BubblesColor(
                 dotPrimaryColor: Color(0xffFFA500),
                 dotSecondaryColor: Color(0xffd8392b),

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:social_media_simulation/components/custom_image.dart';
 import 'package:social_media_simulation/models/user.dart';
 import 'package:social_media_simulation/screens/post_screen/post_view_model/post_view_model.dart';
+import 'package:social_media_simulation/utils/constants.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
 import 'package:social_media_simulation/widgets/indicator.dart';
 
@@ -43,7 +44,10 @@ class _CreatePostState extends State<CreatePost> {
                 Navigator.pop(context);
               },
             ),
-            title: Text('Milo'.toUpperCase()),
+            title: Text(
+              Constants.appName,
+              style: TextStyle(fontWeight: FontWeight.w900),
+            ),
             centerTitle: true,
             actions: [
               GestureDetector(
@@ -57,7 +61,7 @@ class _CreatePostState extends State<CreatePost> {
                   child: Text(
                     'Post'.toUpperCase(),
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w900,
                       fontSize: 15,
                       color: Theme.of(context).colorScheme.secondary,
                     ),

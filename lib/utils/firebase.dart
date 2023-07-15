@@ -16,6 +16,7 @@ CollectionReference postRef = firestore.collection('posts');
 CollectionReference notificationRef = firestore.collection('notifications');
 CollectionReference commentRef = firestore.collection('comments');
 CollectionReference likesRef = firestore.collection('likes');
+CollectionReference statusRef = firestore.collection('status');
 CollectionReference storyRef = firestore.collection('posts');
 
 //storage refs

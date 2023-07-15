@@ -11,6 +11,7 @@ import 'package:social_media_simulation/screens/edit_profile_screen/edit_profile
 import 'package:social_media_simulation/screens/login_screen/login_screen.dart';
 import 'package:social_media_simulation/screens/profile_screen/list_posts/list_posts.dart';
 import 'package:social_media_simulation/screens/setting_screen/setting_screen.dart';
+import 'package:social_media_simulation/utils/constants.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
 import 'package:social_media_simulation/widgets/post_tile.dart';
 
@@ -58,7 +59,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('MILO'),
+        title: Text(
+          Constants.appName,
+          style: TextStyle(fontWeight: FontWeight.w900),
+        ),
         actions: [
           widget.profileId == firebaseAuth.currentUser!.uid
               ? Center(
@@ -554,7 +558,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   handleFollow() async {
     DocumentSnapshot doc = await usersRef.doc(currentUserId()).get();
-    users = UserModel.fromJson(doc.data as Map<String, dynamic>);
+    users = UserModel.fromJson(doc.data() as Map<String, dynamic>);
     setState(() {
       isFollowing = true;
     });

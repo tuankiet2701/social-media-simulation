@@ -127,11 +127,17 @@ class _SearchScreenState extends State<SearchScreen>
                   onTap: () {
                     searchController.clear();
                   },
-                  child: Icon(
-                    Ionicons.close_outline,
-                    size: 12,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
+                  child: searchController.text.isNotEmpty
+                      ? Icon(
+                          Ionicons.close_outline,
+                          size: 13,
+                          color: Theme.of(context).colorScheme.secondary,
+                        )
+                      : Icon(
+                          Ionicons.search,
+                          size: 13,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                 ),
                 border: InputBorder.none,
                 counterText: '',

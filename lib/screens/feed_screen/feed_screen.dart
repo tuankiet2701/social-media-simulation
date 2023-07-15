@@ -5,6 +5,7 @@ import 'package:social_media_simulation/models/post.dart';
 import 'package:social_media_simulation/utils/constants.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
 import 'package:social_media_simulation/widgets/indicator.dart';
+import 'package:social_media_simulation/widgets/story_widget.dart';
 import 'package:social_media_simulation/widgets/user_post.dart';
 
 class FeedScreen extends StatefulWidget {
@@ -14,7 +15,8 @@ class FeedScreen extends StatefulWidget {
   State<FeedScreen> createState() => _FeedScreenState();
 }
 
-class _FeedScreenState extends State<FeedScreen> {
+class _FeedScreenState extends State<FeedScreen>
+    with AutomaticKeepAliveClientMixin {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   int page = 5;
@@ -62,12 +64,12 @@ class _FeedScreenState extends State<FeedScreen> {
         onRefresh: () =>
             postRef.orderBy('timestamp', descending: true).limit(page).get(),
         child: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(height: 100),
+              const StoryWidget(),
               Container(
                 height: MediaQuery.of(context).size.height,
                 child: FutureBuilder(
@@ -115,4 +117,7 @@ class _FeedScreenState extends State<FeedScreen> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

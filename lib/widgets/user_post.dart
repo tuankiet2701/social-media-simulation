@@ -13,6 +13,7 @@ import 'package:social_media_simulation/screens/profile_screen/profile_screen.da
 import 'package:social_media_simulation/screens/view_image/view_image.dart';
 import 'package:social_media_simulation/services/post_service.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
+import 'package:social_media_simulation/widgets/indicator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:like_button/like_button.dart';
 
@@ -73,11 +74,11 @@ class UserPost extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 0),
+                            padding: const EdgeInsets.only(left: 8),
                             child: Row(
                               children: [
                                 buildLikeButton(),
-                                const SizedBox(width: 15),
+                                const SizedBox(width: 18),
                                 InkWell(
                                   borderRadius: BorderRadius.circular(10),
                                   onTap: () {
@@ -124,22 +125,24 @@ class UserPost extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              // const SizedBox(width: 5),
-                              // StreamBuilder(
-                              //     stream: commentRef
-                              //         .doc(post!.postId)
-                              //         .collection('comments')
-                              //         .snapshots(),
-                              //     builder:
-                              //         (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                              //       if (snapshot.hasData) {
-                              //         QuerySnapshot snap = snapshot.data!;
-                              //         List<DocumentSnapshot> docs = snap.docs;
-                              //         return buildCommentsCount(context, docs.length);
-                              //       } else {
-                              //         return buildCommentsCount(context, 0);
-                              //       }
-                              //     }),
+                              const SizedBox(width: 5),
+                              StreamBuilder(
+                                stream: commentRef
+                                    .doc(post!.postId)
+                                    .collection('comments')
+                                    .snapshots(),
+                                builder: (context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (snapshot.hasData) {
+                                    QuerySnapshot snap = snapshot.data!;
+                                    List<DocumentSnapshot> docs = snap.docs;
+                                    return buildCommentsCount(
+                                        context, docs.length);
+                                  } else {
+                                    return buildCommentsCount(context, 0);
+                                  }
+                                },
+                              ),
                             ],
                           ),
                           Visibility(
@@ -188,47 +191,50 @@ class UserPost extends StatelessWidget {
           .where('userId', isEqualTo: currentUserId())
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        List<QueryDocumentSnapshot> docs = snapshot.data!.docs ?? [];
-        Future<bool> onLikeButtonTapped(bool isLiked) async {
-          if (docs.isEmpty) {
-            likesRef.add({
-              'userId': currentUserId(),
-              'postId': post!.postId,
-              'dateCreated': Timestamp.now(),
-            });
-            addLikesToNotification();
-            return !isLiked;
-          } else {
-            likesRef.doc(docs[0].id).delete();
-            service.removeLikeFromNotification(
-                post!.ownerId!, post!.postId!, currentUserId());
-            return isLiked;
+        if (snapshot.hasData) {
+          List<QueryDocumentSnapshot> docs = snapshot.data!.docs ?? [];
+          Future<bool> onLikeButtonTapped(bool isLiked) async {
+            if (docs.isEmpty) {
+              likesRef.add({
+                'userId': currentUserId(),
+                'postId': post!.postId,
+                'dateCreated': Timestamp.now(),
+              });
+              addLikesToNotification();
+              return !isLiked;
+            } else {
+              likesRef.doc(docs[0].id).delete();
+              service.removeLikeFromNotification(
+                  post!.ownerId!, post!.postId!, currentUserId());
+              return isLiked;
+            }
           }
-        }
 
-        return LikeButton(
-          onTap: onLikeButtonTapped,
-          size: 25,
-          circleColor: const CircleColor(
-              start: Color(0xFFFFC0CB), end: Color(0xFFFF0000)),
-          bubblesColor: const BubblesColor(
-            dotPrimaryColor: Color(0xffFFA500),
-            dotSecondaryColor: Color(0xffd8392b),
-            dotThirdColor: Color(0xffFF69B4),
-            dotLastColor: Color(0xffff8c00),
-          ),
-          likeBuilder: (bool isLiked) {
-            return Icon(
-              docs.isEmpty ? Ionicons.heart_outline : Ionicons.heart,
-              color: docs.isEmpty
-                  ? Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.black
-                  : Colors.red,
-              size: 25,
-            );
-          },
-        );
+          return LikeButton(
+            onTap: onLikeButtonTapped,
+            size: 25,
+            circleColor: const CircleColor(
+                start: Color(0xFFFFC0CB), end: Color(0xFFFF0000)),
+            bubblesColor: const BubblesColor(
+              dotPrimaryColor: Color(0xffFFA500),
+              dotSecondaryColor: Color(0xffd8392b),
+              dotThirdColor: Color(0xffFF69B4),
+              dotLastColor: Color(0xffff8c00),
+            ),
+            likeBuilder: (bool isLiked) {
+              return Icon(
+                docs.isEmpty ? Ionicons.heart_outline : Ionicons.heart,
+                color: docs.isEmpty
+                    ? Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black
+                    : Colors.red,
+                size: 25,
+              );
+            },
+          );
+        }
+        return Container();
       },
     );
   }
@@ -341,7 +347,7 @@ class UserPost extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
-                              post!.location ?? "Milo",
+                              post!.location ?? "",
                               style: const TextStyle(
                                 fontSize: 10,
                                 color: Color(0xFF4D4D4D),
@@ -356,9 +362,10 @@ class UserPost extends StatelessWidget {
               ),
             ),
           );
-        } else {
-          return Container();
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return circularProgress(context);
         }
+        return Container();
       },
     );
   }
