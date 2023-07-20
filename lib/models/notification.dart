@@ -9,8 +9,16 @@ class NotificationModel {
   String? mediaUrl;
   String? commentData;
   Timestamp? timestamp;
-  NotificationModel(this.type, this.username, this.userId, this.userDp,
-      this.postId, this.commentData, this.mediaUrl, this.timestamp);
+  NotificationModel(
+    this.type,
+    this.username,
+    this.userId,
+    this.userDp,
+    this.postId,
+    this.commentData,
+    this.mediaUrl,
+    this.timestamp,
+  );
 
   NotificationModel.fromJson(Map<String, dynamic> json) {
     type = json['type'];

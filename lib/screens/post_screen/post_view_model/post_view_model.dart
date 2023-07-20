@@ -54,9 +54,9 @@ class PostViewModel extends ChangeNotifier {
 
   setPost(PostModel post) {
     if (post != null) {
-      description = post.description;
+      description = post.description ?? '';
       imgLink = post.mediaUrl;
-      location = post.location;
+      // location = post.location;
       edit = false;
       notifyListeners();
     } else {
@@ -146,7 +146,8 @@ class PostViewModel extends ChangeNotifier {
     try {
       loading = true;
       notifyListeners();
-      await postService.uploadPost(mediaUrl!, location!, description!);
+      // await postService.uploadPost(mediaUrl!, location!, description!.trim());
+      await postService.uploadPost(mediaUrl!, description?.trim() ?? '');
       showInSnackBar('Uploaded Successfully!', context);
       loading = false;
       resetPost();

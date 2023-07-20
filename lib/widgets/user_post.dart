@@ -46,13 +46,85 @@ class UserPost extends StatelessWidget {
               Radius.circular(10),
             ),
           ),
-          onClosed: (e) {},
+          // onClosed: (e) {},
           closedColor: Theme.of(context).cardColor,
           closedBuilder: (BuildContext context, VoidCallback openContainer) {
             return Stack(
               children: [
                 Column(
                   children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 10, bottom: 5, top: 5),
+                          child: CircleAvatar(
+                            radius: 20,
+                            backgroundImage:
+                                CachedNetworkImageProvider(post!.userDp!),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 5),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  post!.username!,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // IconButton(
+                        //   icon: const Icon(Icons.more_vert),
+                        //   onPressed: () {
+                        //     showDialog(
+                        //       useRootNavigator: false,
+                        //       context: context,
+                        //       builder: (context) {
+                        //         return Dialog(
+                        //           child: ListView(
+                        //             shrinkWrap: true,
+                        //             padding: const EdgeInsets.symmetric(
+                        //                 vertical: 16),
+                        //             children: ['Delete']
+                        //                 .map(
+                        //                   (e) => InkWell(
+                        //                     onTap: () async {
+                        //                       try {
+                        //                         await firestore
+                        //                             .collection('posts')
+                        //                             .doc(post!.postId)
+                        //                             .delete();
+                        //                       } catch (e) {
+                        //                         print(e);
+                        //                       }
+                        //                       Navigator.of(context).pop();
+                        //                     },
+                        //                     child: Container(
+                        //                       padding:
+                        //                           const EdgeInsets.symmetric(
+                        //                         vertical: 12,
+                        //                         horizontal: 16,
+                        //                       ),
+                        //                       child: Text(e),
+                        //                     ),
+                        //                   ),
+                        //                 )
+                        //                 .toList(),
+                        //           ),
+                        //         );
+                        //       },
+                        //     );
+                        //   },
+                        // ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
                     ClipRRect(
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(10),
@@ -159,7 +231,7 @@ class UserPost extends StatelessWidget {
                                       .color,
                                   fontSize: 15,
                                 ),
-                                maxLines: 2,
+                                maxLines: null,
                               ),
                             ),
                           ),

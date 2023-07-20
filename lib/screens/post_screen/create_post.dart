@@ -87,7 +87,7 @@ class _CreatePostState extends State<CreatePost> {
                       ),
                       title: Text(
                         user.username!,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(user.email!),
                     );
@@ -102,7 +102,7 @@ class _CreatePostState extends State<CreatePost> {
                   height: MediaQuery.of(context).size.width - 30,
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
                     border: Border.all(
                       color: Theme.of(context).colorScheme.secondary,
                     ),
@@ -143,42 +143,42 @@ class _CreatePostState extends State<CreatePost> {
               TextFormField(
                 initialValue: viewModel.description,
                 decoration: const InputDecoration(
-                  hintText: 'Eg. This is very beautiful place!',
+                  hintText: 'Write a caption',
                   focusedBorder: UnderlineInputBorder(),
                 ),
                 maxLines: null,
                 onChanged: (value) => viewModel.setDescription(value),
               ),
-              const SizedBox(height: 20),
-              Text(
-                'Location'.toUpperCase(),
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.all(0),
-                title: Container(
-                  width: 250,
-                  child: TextFormField(
-                    controller: viewModel.locationTEC,
-                    decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(0),
-                        hintText: 'Ho Chi Minh, Viet Nam!',
-                        focusedBorder: UnderlineInputBorder()),
-                    maxLines: null,
-                    onChanged: (value) => viewModel.setLocation(value),
-                  ),
-                ),
-                trailing: IconButton(
-                  tooltip: 'Use your current location',
-                  icon: const Icon(CupertinoIcons.map_pin_ellipse, size: 25),
-                  iconSize: 30,
-                  color: Theme.of(context).colorScheme.secondary,
-                  onPressed: () => viewModel.getLocation(),
-                ),
-              ),
+              // const SizedBox(height: 20),
+              // Text(
+              //   'Location'.toUpperCase(),
+              //   style: const TextStyle(
+              //     fontSize: 15,
+              //     fontWeight: FontWeight.w600,
+              //   ),
+              // ),
+              // ListTile(
+              //   contentPadding: EdgeInsets.all(0),
+              //   title: Container(
+              //     width: 250,
+              //     child: TextFormField(
+              //       controller: viewModel.locationTEC,
+              //       decoration: const InputDecoration(
+              //           contentPadding: EdgeInsets.all(0),
+              //           hintText: 'Ho Chi Minh, Viet Nam!',
+              //           focusedBorder: UnderlineInputBorder()),
+              //       maxLines: null,
+              //       onChanged: (value) => viewModel.setLocation(value),
+              //     ),
+              //   ),
+              //   trailing: IconButton(
+              //     tooltip: 'Use your current location',
+              //     icon: const Icon(CupertinoIcons.map_pin_ellipse, size: 25),
+              //     iconSize: 30,
+              //     color: Theme.of(context).colorScheme.secondary,
+              //     onPressed: () => viewModel.getLocation(),
+              //   ),
+              // ),
             ],
           ),
         ),

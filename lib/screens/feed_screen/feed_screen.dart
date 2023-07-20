@@ -71,19 +71,23 @@ class _FeedScreenState extends State<FeedScreen>
             children: [
               const StoryWidget(),
               Container(
-                height: MediaQuery.of(context).size.height,
-                child: FutureBuilder(
-                  future: postRef
+                height: MediaQuery.of(context).size.height - 220,
+                child: StreamBuilder(
+                  stream: firestore
+                      .collection('posts')
                       .orderBy('timestamp', descending: true)
-                      .limit(page)
-                      .get(),
+                      .snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasData) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: circularProgress(context),
+                      );
+                    } else if (snapshot.hasData) {
                       var snap = snapshot.data;
                       List docs = snap!.docs;
                       return ListView.builder(
-                        controller: scrollController,
                         itemCount: docs.length,
+                        // controller: scrollController,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           PostModel posts =
@@ -94,9 +98,6 @@ class _FeedScreenState extends State<FeedScreen>
                           );
                         },
                       );
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return circularProgress(context);
                     } else {
                       return const Center(
                         child: Text(
