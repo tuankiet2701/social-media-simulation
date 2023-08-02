@@ -9,7 +9,7 @@ import 'package:social_media_simulation/firebase_options.dart';
 import 'package:social_media_simulation/screens/landing_screen/landing_screen.dart';
 import 'package:social_media_simulation/screens/main_screen/main_screen.dart';
 import 'package:social_media_simulation/services/user_service.dart';
-import 'package:social_media_simulation/view_model/theme_view.dart';
+import 'package:social_media_simulation/view_model/theme/theme_view_model.dart';
 import 'package:social_media_simulation/utils/constants.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
 import 'package:social_media_simulation/utils/provider.dart';

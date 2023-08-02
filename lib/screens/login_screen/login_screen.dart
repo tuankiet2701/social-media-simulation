@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:social_media_simulation/components/password_text_field.dart';
 import 'package:social_media_simulation/components/text_form_builder.dart';
 import 'package:social_media_simulation/screens/forgot_password_screen/forgot_password_screen.dart';
-import 'package:social_media_simulation/screens/login_screen/login_model/login_model.dart';
+import 'package:social_media_simulation/view_model/login_view_model/login_view_model.dart';
 import 'package:social_media_simulation/screens/register_screen/register_screen.dart';
 import 'package:social_media_simulation/utils/validation.dart';
 import 'package:social_media_simulation/widgets/indicator.dart';
@@ -21,7 +21,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    LoginModel loginModel = Provider.of<LoginModel>(context);
+    LoginViewModel loginModel = Provider.of<LoginViewModel>(context);
     return LoadingOverlay(
       progressIndicator: circularProgress(context),
       isLoading: loginModel.loading,
@@ -90,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  buildForm(LoginModel loginModel, BuildContext context) {
+  buildForm(LoginViewModel loginModel, BuildContext context) {
     return Form(
       key: loginModel.formKey,
       child: Column(

@@ -29,6 +29,14 @@ class _ViewImageState extends State<ViewImage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(Ionicons.chevron_back),
+        ),
+      ),
       body: Center(
         child: buildImage(context),
       ),

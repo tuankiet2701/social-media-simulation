@@ -4,7 +4,7 @@ import 'package:social_media_simulation/screens/main_screen/main_screen.dart';
 import 'package:social_media_simulation/services/auth_service.dart';
 import 'package:social_media_simulation/widgets/showInSnackbar.dart';
 
-class RegisterModel extends ChangeNotifier {
+class RegisterViewModel extends ChangeNotifier {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   final GlobalKey<FormState> formKey = GlobalKey();
   bool validate = false;

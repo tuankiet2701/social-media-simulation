@@ -4,7 +4,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_simulation/components/text_form_builder.dart';
 import 'package:social_media_simulation/models/user.dart';
-import 'package:social_media_simulation/screens/edit_profile_screen/edit_profile_model/edit_profile_model.dart';
+import 'package:social_media_simulation/view_model/edit_profile_view_model/edit_profile_view_model.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
 import 'package:social_media_simulation/utils/validation.dart';
 import 'package:social_media_simulation/widgets/indicator.dart';
@@ -26,7 +26,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    EditProfileModel editProfileModel = Provider.of<EditProfileModel>(context);
+    EditProfileViewModel editProfileModel =
+        Provider.of<EditProfileViewModel>(context);
     return LoadingOverlay(
       progressIndicator: circularProgress(context),
       isLoading: editProfileModel.loading,
@@ -112,7 +113,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  buildForm(EditProfileModel editProfileModel, BuildContext context) {
+  buildForm(EditProfileViewModel editProfileModel, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Form(

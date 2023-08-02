@@ -2,8 +2,8 @@ import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:social_media_simulation/screens/post_screen/create_post.dart';
-import 'package:social_media_simulation/view_model/status_view_model.dart';
+import 'package:social_media_simulation/screens/create_post_screen/create_post.dart';
+import 'package:social_media_simulation/view_model/story_view_model/story_view_model.dart';
 
 class FabContainer extends StatelessWidget {
   final Widget? page;
@@ -14,7 +14,7 @@ class FabContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StatusViewModel statusViewModel = Provider.of<StatusViewModel>(context);
+    StoryViewModel viewModel = Provider.of<StoryViewModel>(context);
     return OpenContainer(
       transitionType: ContainerTransitionType.fade,
       openBuilder: (BuildContext context, VoidCallback _) {
@@ -35,7 +35,7 @@ class FabContainer extends StatelessWidget {
             color: Theme.of(context).colorScheme.secondary,
           ),
           onPressed: () {
-            chooseUpload(context, statusViewModel);
+            chooseUpload(context, viewModel);
           },
           mini: mini,
         );
@@ -43,7 +43,7 @@ class FabContainer extends StatelessWidget {
     );
   }
 
-  chooseUpload(BuildContext context, StatusViewModel statusViewModel) {
+  chooseUpload(BuildContext context, StoryViewModel viewModel) {
     return showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
@@ -71,7 +71,7 @@ class FabContainer extends StatelessWidget {
                 ),
                 const Divider(),
                 ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     CupertinoIcons.camera_on_rectangle,
                     size: 25,
                   ),
@@ -91,7 +91,9 @@ class FabContainer extends StatelessWidget {
                     size: 25,
                   ),
                   title: Text('Add to Story'),
-                  onTap: () {},
+                  onTap: () async {
+                    await viewModel.pickImage(context: context);
+                  },
                 )
               ],
             ),

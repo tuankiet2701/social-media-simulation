@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_simulation/models/story.dart';
 import 'package:social_media_simulation/models/user.dart';
+import 'package:social_media_simulation/screens/story_screen/story_screen.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
 import 'package:social_media_simulation/widgets/indicator.dart';
 
@@ -82,7 +83,19 @@ class StoryWidget extends StatelessWidget {
             child: Column(
               children: [
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => StoryScreen(
+                          initPage: index,
+                          userId: userId,
+                          storyId: chatId,
+                          statusId: messageId,
+                        ),
+                      ),
+                    );
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.secondary,
@@ -125,10 +138,10 @@ class StoryWidget extends StatelessWidget {
   }
 
   Stream<QuerySnapshot> userChatsStream(String uid) {
-    return storyRef.where('whoCanSee', arrayContains: '$uid').snapshots();
+    return storyRef.where('whoCanSee', arrayContains: uid).snapshots();
   }
 
   Stream<QuerySnapshot> messageListStream(String documentId) {
-    return storyRef.doc(documentId).collection('storyes').snapshots();
+    return storyRef.doc(documentId).collection('stories').snapshots();
   }
 }

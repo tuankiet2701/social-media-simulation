@@ -446,6 +446,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
+  flutter_chat_bubble:
+    dependency: "direct main"
+    description:
+      name: flutter_chat_bubble
+      sha256: ede33df7237fea3d89464c8493bfa0bee2f94f50fd097ebd30c517c3c0d4fcf9
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -1237,6 +1245,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  story:
+    dependency: "direct main"
+    description:
+      name: story
+      sha256: "0cff3c02d5ad1d9c1cf79481b8fe4a4f2f859e56b351644e96b8b209e6a110a5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   stream_channel:
     dependency: transitive
     description:

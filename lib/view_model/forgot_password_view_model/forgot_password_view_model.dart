@@ -3,7 +3,7 @@ import 'package:social_media_simulation/services/auth_service.dart';
 import 'package:social_media_simulation/utils/validation.dart';
 import 'package:social_media_simulation/widgets/showInSnackbar.dart';
 
-class ForgotPasswordModel extends ChangeNotifier {
+class ForgotPasswordViewModel extends ChangeNotifier {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool validate = false;

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:social_media_simulation/view_model/theme_view.dart';
+import 'package:social_media_simulation/view_model/theme/theme_view_model.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});

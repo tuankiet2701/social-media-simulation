@@ -6,7 +6,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_simulation/components/custom_image.dart';
 import 'package:social_media_simulation/models/user.dart';
-import 'package:social_media_simulation/screens/post_screen/post_view_model/post_view_model.dart';
+import 'package:social_media_simulation/view_model/post_view_model/post_view_model.dart';
 import 'package:social_media_simulation/utils/constants.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
 import 'package:social_media_simulation/widgets/indicator.dart';

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:social_media_simulation/components/password_text_field.dart';
 import 'package:social_media_simulation/components/text_form_builder.dart';
 import 'package:social_media_simulation/screens/login_screen/login_screen.dart';
-import 'package:social_media_simulation/screens/register_screen/register_model/register_model.dart';
+import 'package:social_media_simulation/view_model/register_view_model/register_model.dart';
 import 'package:social_media_simulation/utils/validation.dart';
 import 'package:social_media_simulation/widgets/indicator.dart';
 
@@ -21,7 +21,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
-    RegisterModel registerModel = Provider.of<RegisterModel>(context);
+    RegisterViewModel registerModel = Provider.of<RegisterViewModel>(context);
     return LoadingOverlay(
       progressIndicator: circularProgress(context),
       isLoading: registerModel.loading,
@@ -73,7 +73,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  buildForm(RegisterModel registerModel, BuildContext context) {
+  buildForm(RegisterViewModel registerModel, BuildContext context) {
     return Form(
       key: registerModel.formKey,
       // autovalidateMode: AutovalidateMode.onUserInteraction,

@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:social_media_simulation/models/post.dart';
+import 'package:social_media_simulation/screens/chat_screen/recent_chats.dart';
 import 'package:social_media_simulation/utils/constants.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
 import 'package:social_media_simulation/widgets/indicator.dart';
@@ -54,7 +56,14 @@ class _FeedScreenState extends State<FeedScreen>
               Ionicons.chatbubble_ellipses,
               size: 30,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (_) => const ChatsScreen(),
+                ),
+              );
+            },
           ),
           const SizedBox(width: 20)
         ],

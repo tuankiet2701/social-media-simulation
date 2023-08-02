@@ -6,7 +6,7 @@ import 'package:social_media_simulation/screens/profile_screen/profile_screen.da
 import 'package:social_media_simulation/services/auth_service.dart';
 import 'package:social_media_simulation/widgets/showInSnackbar.dart';
 
-class LoginModel extends ChangeNotifier {
+class LoginViewModel extends ChangeNotifier {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool validate = false;

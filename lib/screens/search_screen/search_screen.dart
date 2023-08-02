@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:social_media_simulation/models/user.dart';
+import 'package:social_media_simulation/screens/chat_screen/conversation.dart';
 import 'package:social_media_simulation/screens/profile_screen/profile_screen.dart';
 import 'package:social_media_simulation/utils/constants.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
@@ -206,7 +207,52 @@ class _SearchScreenState extends State<SearchScreen>
                     subtitle: Text(user.email!),
                     trailing: doc.id != currentUserId()
                         ? GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (_) => StreamBuilder(
+                                    stream: chatIdRef
+                                        .where(
+                                          'users',
+                                          isEqualTo: getUser(
+                                            firebaseAuth.currentUser!.uid,
+                                            doc.id,
+                                          ),
+                                        )
+                                        .snapshots(),
+                                    builder: (context,
+                                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Center(
+                                          child: circularProgress(context),
+                                        );
+                                      } else if (snapshot.hasData) {
+                                        var snap = snapshot.data;
+                                        List docs = snap!.docs;
+                                        print(snapshot.data!.docs.toString());
+                                        return docs.isEmpty
+                                            ? Conversation(
+                                                userId: doc.id,
+                                                chatId: 'newChat',
+                                              )
+                                            : Conversation(
+                                                userId: doc.id,
+                                                chatId: docs[0]
+                                                    .get('chatId')
+                                                    .toString(),
+                                              );
+                                      }
+                                      return Conversation(
+                                        userId: doc.id,
+                                        chatId: 'newChat',
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
                             child: Container(
                               height: 30,
                               width: 62,

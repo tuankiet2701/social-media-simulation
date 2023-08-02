@@ -3,7 +3,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_simulation/components/text_form_builder.dart';
-import 'package:social_media_simulation/screens/forgot_password_screen/forgot_password_model/forgot_password_model.dart';
+import 'package:social_media_simulation/view_model/forgot_password_view_model/forgot_password_view_model.dart';
 import 'package:social_media_simulation/utils/validation.dart';
 import 'package:social_media_simulation/widgets/indicator.dart';
 
@@ -17,8 +17,8 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
-    ForgotPasswordModel forgotPasswordModel =
-        Provider.of<ForgotPasswordModel>(context);
+    ForgotPasswordViewModel forgotPasswordModel =
+        Provider.of<ForgotPasswordViewModel>(context);
     return LoadingOverlay(
       isLoading: forgotPasswordModel.loading,
       progressIndicator: circularProgress(context),
@@ -55,7 +55,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     );
   }
 
-  buildForm(ForgotPasswordModel forgotPasswordModel, BuildContext context) {
+  buildForm(ForgotPasswordViewModel forgotPasswordModel, BuildContext context) {
     return Form(
       key: forgotPasswordModel.formKey,
       child: Column(

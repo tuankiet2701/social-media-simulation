@@ -16,8 +16,9 @@ CollectionReference postRef = firestore.collection('posts');
 CollectionReference notificationRef = firestore.collection('notifications');
 CollectionReference commentRef = firestore.collection('comments');
 CollectionReference likesRef = firestore.collection('likes');
-CollectionReference statusRef = firestore.collection('status');
-CollectionReference storyRef = firestore.collection('posts');
+CollectionReference storyRef = firestore.collection('story');
+CollectionReference chatRef = firestore.collection("chats");
+CollectionReference chatIdRef = firestore.collection('chatIds');
 
 //storage refs
 Reference profilePic = storage.ref().child('profilePic');

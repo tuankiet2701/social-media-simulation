@@ -8,7 +8,7 @@ import 'package:social_media_simulation/services/user_service.dart';
 import 'package:social_media_simulation/utils/constants.dart';
 import 'package:social_media_simulation/widgets/showInSnackbar.dart';
 
-class EditProfileModel extends ChangeNotifier {
+class EditProfileViewModel extends ChangeNotifier {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool validate = false;
