@@ -31,34 +31,37 @@ class _ConversationState extends State<Conversation> {
   bool isFirst = false;
   String? chatId;
 
-  @override
-  void initState() {
-    super.initState();
-    scrollController.addListener(() {
-      focusNode.unfocus();
-    });
-    if (widget.chatId == 'newChat') {
-      isFirst = true;
-    }
-    chatId = widget.chatId;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   scrollController.addListener(() {
+  //     focusNode.unfocus();
+  //   });
+  //   if (widget.chatId == 'newChat') {
+  //     isFirst = true;
+  //   }
+  //   chatId = widget.chatId;
 
-    messageController.addListener(
-      () {
-        if (focusNode.hasFocus && messageController.text.isNotEmpty) {
-          setTyping(true);
-        } else if (!focusNode.hasFocus ||
-            (focusNode.hasFocus && messageController.text.isEmpty)) {
-          setTyping(false);
-        }
-      },
-    );
-  }
+  //   messageController.addListener(
+  //     () {
+  //       if (focusNode.hasFocus && messageController.text.isNotEmpty) {
+  //         setTyping(true);
+  //       } else if (!focusNode.hasFocus ||
+  //           (focusNode.hasFocus && messageController.text.isEmpty)) {
+  //         setTyping(false);
+  //       }
+  //     },
+  //   );
+  // }
 
-  setTyping(typing) {
-    UserViewModel viewmodel = Provider.of<UserViewModel>(context);
-    viewmodel.setUser();
-    var user = Provider.of<UserViewModel>(context, listen: true).user;
-  }
+  // setTyping(typing) {
+  //   UserViewModel viewmodel =
+  //       Provider.of<UserViewModel>(context, listen: false);
+  //   viewmodel.setUser();
+  //   var user = Provider.of<UserViewModel>(context, listen: false).user;
+  //   Provider.of<ChatViewModel>(context, listen: false)
+  //       .setUserTyping(widget.chatId, user, typing);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +97,11 @@ class _ConversationState extends State<Conversation> {
                         );
                       } else if (snapshot.hasData) {
                         List messages = snapshot.data!.docs;
-                        viewModel.setReadCount(
-                            widget.chatId, user, messages.length);
+                        // viewModel.setReadCount(
+                        //     widget.chatId, user, messages.length);
                         return ListView.builder(
                           controller: scrollController,
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           itemCount: messages.length,
                           reverse: true,
                           itemBuilder: (BuildContext context, int index) {
@@ -130,7 +133,7 @@ class _ConversationState extends State<Conversation> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           IconButton(
-                            icon: Icon(CupertinoIcons.photo_on_rectangle),
+                            icon: const Icon(CupertinoIcons.photo_on_rectangle),
                             color: Theme.of(context).colorScheme.secondary,
                             onPressed: () => showPhotoOptions(viewModel, user),
                           ),
@@ -184,17 +187,17 @@ class _ConversationState extends State<Conversation> {
     );
   }
 
-  _buildOnlineText(var user, bool isTyping) {
-    if (user.isOnline) {
-      if (isTyping) {
-        return 'typing...';
-      } else {
-        return 'online';
-      }
-    } else {
-      return 'last seen ${timeago.format(user.lastSeen.toData())}';
-    }
-  }
+  // _buildOnlineText(var user, bool isTyping) {
+  //   if (user.isOnline) {
+  //     if (isTyping) {
+  //       return 'typing...';
+  //     } else {
+  //       return 'online';
+  //     }
+  //   } else {
+  //     return 'last seen ${timeago.format(user.lastSeen.toDate())}';
+  //   }
+  // }
 
   buildUserName() {
     return StreamBuilder(
@@ -263,14 +266,15 @@ class _ConversationState extends State<Conversation> {
                                 snapshot.data as DocumentSnapshot<Object?>;
                             Map? data = snap.data() as Map<String, dynamic>?;
                             Map? usersTyping = data?['typing'] ?? {};
-                            return Text(
-                              _buildOnlineText(
-                                  user, usersTyping![widget.userId] ?? false),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 11,
-                              ),
-                            );
+                            // return Text(
+                            //   _buildOnlineText(
+                            //       user, usersTyping![widget.userId] ?? false),
+                            //   style: const TextStyle(
+                            //     fontWeight: FontWeight.w400,
+                            //     fontSize: 11,
+                            //   ),
+                            // );
+                            return Text('123');
                           } else {
                             return const SizedBox();
                           }
@@ -301,7 +305,7 @@ class _ConversationState extends State<Conversation> {
   showPhotoOptions(ChatViewModel viewModel, var user) {
     showModalBottomSheet(
         context: context,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(10),
           ),
@@ -367,7 +371,7 @@ class _ConversationState extends State<Conversation> {
           });
           viewModel.sendMessage(widget.chatId, message);
         });
-        //update the reads to and empty map in other to avoid null value bug
+        //update the reads to an empty map in other to avoid null value bug
         chatRef.doc(chatId).update({'reads': {}});
         //update the typing to an empty map in other to avoid null value bug
         chatRef.doc(chatId).update({'typing': {}});

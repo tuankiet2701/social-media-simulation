@@ -50,7 +50,7 @@ class _StoryScreenState extends State<StoryScreen> {
               return StoryPageView(
                 indicatorPadding:
                     const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
-                indicatorHeight: 1,
+                indicatorHeight: 5,
                 initialPage: 0,
                 onPageLimitReached: () {
                   Navigator.pop(context);

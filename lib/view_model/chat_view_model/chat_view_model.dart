@@ -24,13 +24,13 @@ class ChatViewModel extends ChangeNotifier {
     return newChatId;
   }
 
-  setReadCount(String chatId, var user, int count) {
-    chatService.setUserRead(chatId, user, count);
-  }
+  // setReadCount(String chatId, var user, int count) {
+  //   chatService.setUserRead(chatId, user, count);
+  // }
 
-  setUserTyping(String chatId, var user, bool typing) {
-    chatService.setUserTyping(chatId, user, typing);
-  }
+  // setUserTyping(String chatId, var user, bool typing) {
+  //   chatService.setUserTyping(chatId, user, typing);
+  // }
 
   pickImage({int? source, BuildContext? context, String? chatId}) async {
     PickedFile? pickedFile = source == 0

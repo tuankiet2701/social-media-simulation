@@ -60,7 +60,7 @@ class _FeedScreenState extends State<FeedScreen>
               Navigator.push(
                 context,
                 CupertinoPageRoute(
-                  builder: (_) => const ChatsScreen(),
+                  builder: (_) => RecentChatsScreen(),
                 ),
               );
             },

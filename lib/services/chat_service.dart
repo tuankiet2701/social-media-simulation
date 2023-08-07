@@ -13,7 +13,7 @@ class ChatService {
     //will send message to chats collection with the userId
     await chatRef.doc(chatId).collection("messages").add(message.toJson());
     //will update "lastTextTime" to the last time a text was send
-    await chatRef.doc(chatId).update({"lastTextTime": Timestamp.now()});
+    // await chatRef.doc(chatId).update({"lastTextTime": Timestamp.now()});
   }
 
   Future<String> sendFirstMessage(Message message, String recipient) async {
@@ -37,22 +37,22 @@ class ChatService {
   }
 
   //determine if a user has read a chat and updates how many messages unread
-  setUserRead(String chatId, User user, int count) async {
-    DocumentSnapshot snap = await chatRef.doc(chatId).get();
-    Map reads = snap.get('reads') ?? {};
-    reads[user.uid] = count;
-    await chatRef.doc(chatId).update({'reads': reads});
-  }
+  // setUserRead(String chatId, User user, int count) async {
+  //   DocumentSnapshot snap = await chatRef.doc(chatId).get();
+  //   Map reads = snap.get('reads') ?? {};
+  //   reads[user.uid] = count;
+  //   await chatRef.doc(chatId).update({'reads': reads});
+  // }
 
   //determine when a user has start typing a message
-  setUserTyping(String chatId, User user, bool userTyping) async {
-    DocumentSnapshot snap = await chatRef.doc(chatId).get();
-    Map typing = snap.get('typing') ?? {};
-    typing[user.uid] = userTyping;
-    await chatRef.doc(chatId).update(
-      {
-        'typing': typing,
-      },
-    );
-  }
+  // setUserTyping(String chatId, User user, bool userTyping) async {
+  //   DocumentSnapshot snap = await chatRef.doc(chatId).get();
+  //   Map typing = snap.get('typing') ?? {};
+  //   typing[user.uid] = userTyping;
+  //   await chatRef.doc(chatId).update(
+  //     {
+  //       'typing': typing,
+  //     },
+  //   );
+  // }
 }

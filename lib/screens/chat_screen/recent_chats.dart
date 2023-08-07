@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_simulation/components/chat_item.dart';
 import 'package:social_media_simulation/models/message.dart';
@@ -7,8 +8,7 @@ import 'package:social_media_simulation/utils/firebase.dart';
 import 'package:social_media_simulation/view_model/user/user_view_model.dart';
 import 'package:social_media_simulation/widgets/indicator.dart';
 
-class ChatsScreen extends StatelessWidget {
-  const ChatsScreen({super.key});
+class RecentChatsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserViewModel viewModel =
@@ -20,16 +20,18 @@ class ChatsScreen extends StatelessWidget {
           onTap: () {
             Navigator.pop(context);
           },
-          child: const Icon(Icons.keyboard_backspace),
+          child: const Icon(Ionicons.chevron_back),
         ),
-        title: Text('Chats'),
+        title: const Text(
+          "Chats",
+          style: TextStyle(fontWeight: FontWeight.w900),
+        ),
+        centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: userChatsStream(viewModel.user?.uid ?? ''),
+        stream: userChatsStream(viewModel.user!.uid ?? ""),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return circularProgress(context);
-          } else if (snapshot.hasData) {
+          if (snapshot.hasData) {
             List chatList = snapshot.data!.docs;
             if (chatList.isNotEmpty) {
               return ListView.separated(
@@ -39,28 +41,26 @@ class ChatsScreen extends StatelessWidget {
                   return StreamBuilder<QuerySnapshot>(
                     stream: messageListStream(chatListSnapshot.id),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return circularProgress(context);
-                      } else if (snapshot.hasData) {
+                      if (snapshot.hasData) {
                         List messages = snapshot.data!.docs;
                         Message message =
                             Message.fromJson(messages.first.data());
                         List users = chatListSnapshot.get('users');
                         //remove the current user's id from the Users
                         //list so we can get the second user's id
-                        users.remove(viewModel.user?.uid ?? '');
-                        String recipent = users[0];
+                        users.remove(viewModel.user!.uid ?? "");
+                        String recipient = users[0];
                         return ChatItem(
-                          userId: recipent,
+                          userId: recipient,
                           messageCount: messages.length,
-                          msg: message.content!,
-                          time: message.time!,
+                          msg: message.content,
+                          time: message.time,
                           chatId: chatListSnapshot.id,
-                          type: message.type!,
-                          currentUserId: viewModel.user?.uid ?? "",
+                          type: message.type,
+                          currentUserId: viewModel.user!.uid ?? "",
                         );
                       } else {
-                        return const SizedBox();
+                        return const SizedBox.shrink();
                       }
                     },
                   );

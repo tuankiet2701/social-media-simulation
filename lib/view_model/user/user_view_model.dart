@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
-import 'package:social_media_simulation/utils/firebase.dart';
 
 class UserViewModel extends ChangeNotifier {
   User? user;
@@ -8,6 +7,6 @@ class UserViewModel extends ChangeNotifier {
 
   setUser() {
     user = auth.currentUser;
-    // notifyListeners();
+    notifyListeners();
   }
 }
