@@ -72,28 +72,30 @@ class _SearchScreenState extends State<SearchScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          Constants.appName,
-          style: const TextStyle(fontWeight: FontWeight.w900),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(
+            Constants.appName,
+            style: const TextStyle(fontWeight: FontWeight.w900),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: RefreshIndicator(
-        color: Theme.of(context).colorScheme.secondary,
-        onRefresh: () => getUsers(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: buildSearch(),
-            ),
-            buildUser(),
-          ],
+        body: RefreshIndicator(
+          color: Theme.of(context).colorScheme.secondary,
+          onRefresh: () => getUsers(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: buildSearch(),
+              ),
+              buildUser(),
+            ],
+          ),
         ),
       ),
     );
@@ -304,7 +306,8 @@ class _SearchScreenState extends State<SearchScreen>
     user2 = user2.substring(0, 5);
     List<String> list = [user1, user2];
     list.sort();
-    var chatId = "${list[0]} - ${list[1]}";
+    var chatId = "${list[0]}-${list[1]}";
+    print(chatId);
     return chatId;
   }
 

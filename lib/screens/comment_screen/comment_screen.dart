@@ -33,139 +33,144 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: const Icon(Ionicons.chevron_back),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(Ionicons.chevron_back),
+          ),
+          centerTitle: true,
+          title: const Text(
+            'Comments',
+            style: TextStyle(fontWeight: FontWeight.w900),
+          ),
         ),
-        centerTitle: true,
-        title: const Text(
-          'Comments',
-          style: TextStyle(fontWeight: FontWeight.w900),
-        ),
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          children: [
-            Flexible(
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: buildFullPost(),
-                  ),
-                  const Divider(),
-                  Flexible(
-                    child: buildComments(),
-                  ),
-                ],
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            children: [
+              Flexible(
+                child: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: buildFullPost(),
+                    ),
+                    const Divider(),
+                    Flexible(
+                      child: buildComments(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  constraints: const BoxConstraints(maxHeight: 190),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Flexible(
-                        child: ListTile(
-                          contentPadding: EdgeInsets.all(0),
-                          title: TextField(
-                            textCapitalization: TextCapitalization.sentences,
-                            controller: commentController,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color:
-                                  Theme.of(context).textTheme.headline6!.color,
-                            ),
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(10),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                              ),
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              hintText: 'Write your comment...',
-                              hintStyle: TextStyle(
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    constraints: const BoxConstraints(maxHeight: 190),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Flexible(
+                          child: ListTile(
+                            contentPadding: EdgeInsets.all(0),
+                            title: TextField(
+                              textCapitalization: TextCapitalization.sentences,
+                              controller: commentController,
+                              style: TextStyle(
                                 fontSize: 15,
                                 color: Theme.of(context)
                                     .textTheme
                                     .headline6!
                                     .color,
                               ),
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(10),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                hintText: 'Write your comment...',
+                                hintStyle: TextStyle(
+                                  fontSize: 15,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline6!
+                                      .color,
+                                ),
+                              ),
+                              // maxLines: null,
+                              onSubmitted: (value) async {
+                                await services.uploadComment(
+                                  currentUserId(),
+                                  commentController.text,
+                                  widget.post!.postId!,
+                                  widget.post!.ownerId!,
+                                  widget.post!.mediaUrl!,
+                                );
+                                commentController.clear();
+                              },
                             ),
-                            // maxLines: null,
-                            onSubmitted: (value) async {
-                              await services.uploadComment(
-                                currentUserId(),
-                                commentController.text,
-                                widget.post!.postId!,
-                                widget.post!.ownerId!,
-                                widget.post!.mediaUrl!,
-                              );
-                              commentController.clear();
-                            },
-                          ),
-                          trailing: GestureDetector(
-                            onTap: () async {
-                              await services.uploadComment(
-                                currentUserId(),
-                                commentController.text,
-                                widget.post!.postId!,
-                                widget.post!.ownerId!,
-                                widget.post!.mediaUrl!,
-                              );
-                              commentController.clear();
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Icon(
-                                Icons.send,
-                                color: Theme.of(context).colorScheme.secondary,
+                            trailing: GestureDetector(
+                              onTap: () async {
+                                await services.uploadComment(
+                                  currentUserId(),
+                                  commentController.text,
+                                  widget.post!.postId!,
+                                  widget.post!.ownerId!,
+                                  widget.post!.mediaUrl!,
+                                );
+                                commentController.clear();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: Icon(
+                                  Icons.send,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

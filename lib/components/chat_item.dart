@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:social_media_simulation/models/enum/message_type.dart';
 import 'package:social_media_simulation/models/user.dart';
+import 'package:social_media_simulation/screens/chat_screen/conversation.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
 import 'package:social_media_simulation/widgets/indicator.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -32,15 +33,14 @@ class ChatItem extends StatelessWidget {
     return StreamBuilder(
       stream: usersRef.doc(userId).snapshots(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return circularProgress(context);
-        } else if (snapshot.hasData) {
+        if (snapshot.hasData) {
           DocumentSnapshot documentSnapshot =
               snapshot.data as DocumentSnapshot<Object?>;
           UserModel user = UserModel.fromJson(
               documentSnapshot.data() as Map<String, dynamic>);
           return ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             leading: Stack(
               children: <Widget>[
                 user.photoUrl == null || user.photoUrl!.isEmpty
@@ -64,18 +64,30 @@ class ChatItem extends StatelessWidget {
                         backgroundImage:
                             CachedNetworkImageProvider('${user.photoUrl}'),
                       ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    height: 11,
-                    width: 11,
-                  ),
-                ),
+                // Positioned(
+                //   bottom: 0,
+                //   right: 0,
+                //   child: Container(
+                //     decoration: BoxDecoration(
+                //       color: Colors.white,
+                //       borderRadius: BorderRadius.circular(6),
+                //     ),
+                //     height: 15,
+                //     width: 15,
+                //     child: Center(
+                //       child: Container(
+                //         decoration: BoxDecoration(
+                //           color: user.isOnline ?? false
+                //               ? const Color(0xff00d72f)
+                //               : Colors.grey,
+                //           borderRadius: BorderRadius.circular(6),
+                //         ),
+                //         height: 11,
+                //         width: 11,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             title: Text(
@@ -103,7 +115,18 @@ class ChatItem extends StatelessWidget {
                 buildCounter(context),
               ],
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(
+                  builder: (BuildContext context) {
+                    return Conversation(
+                      userId: userId!,
+                      chatId: chatId!,
+                    );
+                  },
+                ),
+              );
+            },
           );
         } else {
           return const SizedBox();
@@ -116,9 +139,7 @@ class ChatItem extends StatelessWidget {
     return StreamBuilder(
       stream: messageBodyStream(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return circularProgress(context);
-        } else if (snapshot.hasData) {
+        if (snapshot.hasData) {
           DocumentSnapshot snap = snapshot.data;
           final bool hasScore = snapshot.data!.data()!.containsKey('reads');
           Map usersReads = hasScore ? snap.get('reads') ?? {} : {};
@@ -128,7 +149,7 @@ class ChatItem extends StatelessWidget {
             return const SizedBox();
           } else {
             return Container(
-              padding: EdgeInsets.all(1),
+              padding: const EdgeInsets.all(1),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.secondary,
                 borderRadius: BorderRadius.circular(6),
@@ -138,10 +159,13 @@ class ChatItem extends StatelessWidget {
                 minHeight: 11,
               ),
               child: Padding(
-                padding: EdgeInsets.only(top: 1, left: 5, right: 5),
+                padding: const EdgeInsets.only(top: 1, left: 5, right: 5),
                 child: Text(
                   '$counter',
-                  style: const TextStyle(color: Colors.white, fontSize: 10),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),

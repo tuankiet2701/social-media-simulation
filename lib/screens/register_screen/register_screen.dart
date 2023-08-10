@@ -22,51 +22,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     RegisterViewModel registerModel = Provider.of<RegisterViewModel>(context);
-    return LoadingOverlay(
-      progressIndicator: circularProgress(context),
-      isLoading: registerModel.loading,
-      child: SafeArea(
-        child: Scaffold(
-          key: registerModel.scaffoldKey,
-          body: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-            children: [
-              Text(
-                'Welcome to Milo\nCreate a new account to connect your friends',
-                style: GoogleFonts.nunitoSans(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                ),
-              ),
-              const SizedBox(height: 30),
-              buildForm(registerModel, context),
-              const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      const Text('Already hava an account?'),
-                      const SizedBox(width: 5),
-                      GestureDetector(
-                        onTap: () => Navigator.of(context).pushReplacement(
-                          CupertinoPageRoute(
-                            builder: (_) => LoginScreen(),
-                          ),
-                        ),
-                        child: Text(
-                          'Login',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                      )
-                    ],
+    return SafeArea(
+      child: LoadingOverlay(
+        progressIndicator: circularProgress(context),
+        isLoading: registerModel.loading,
+        child: SafeArea(
+          child: Scaffold(
+            key: registerModel.scaffoldKey,
+            body: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+              children: [
+                Text(
+                  'Welcome to Milo\nCreate a new account to connect your friends',
+                  style: GoogleFonts.nunitoSans(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
                   ),
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(height: 30),
+                buildForm(registerModel, context),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        const Text('Already hava an account?'),
+                        const SizedBox(width: 5),
+                        GestureDetector(
+                          onTap: () => Navigator.of(context).pushReplacement(
+                            CupertinoPageRoute(
+                              builder: (_) => LoginScreen(),
+                            ),
+                          ),
+                          child: Text(
+                            'Login',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

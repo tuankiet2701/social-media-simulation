@@ -28,53 +28,55 @@ UserModel? user;
 class _ViewImageState extends State<ViewImage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: const Icon(Ionicons.chevron_back),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(Ionicons.chevron_back),
+          ),
         ),
-      ),
-      body: Center(
-        child: buildImage(context),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 0,
-        color: Colors.transparent,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Container(
-            height: 50,
-            width: MediaQuery.of(context).size.width,
-            child: Row(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.post!.username!,
-                      style: const TextStyle(fontWeight: FontWeight.w800),
-                    ),
-                    const SizedBox(width: 3),
-                    Row(
-                      children: [
-                        const Icon(Ionicons.alarm_outline, size: 13),
-                        const SizedBox(width: 3),
-                        Text(
-                          timeago.format(
-                            widget.post!.timestamp!.toDate(),
+        body: Center(
+          child: buildImage(context),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          elevation: 0,
+          color: Colors.transparent,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.post!.username!,
+                        style: const TextStyle(fontWeight: FontWeight.w800),
+                      ),
+                      const SizedBox(width: 3),
+                      Row(
+                        children: [
+                          const Icon(Ionicons.alarm_outline, size: 13),
+                          const SizedBox(width: 3),
+                          Text(
+                            timeago.format(
+                              widget.post!.timestamp!.toDate(),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                buildLikeButton(),
-              ],
+                        ],
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  buildLikeButton(),
+                ],
+              ),
             ),
           ),
         ),

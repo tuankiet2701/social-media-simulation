@@ -31,28 +31,28 @@ class _ConversationState extends State<Conversation> {
   bool isFirst = false;
   String? chatId;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   scrollController.addListener(() {
-  //     focusNode.unfocus();
-  //   });
-  //   if (widget.chatId == 'newChat') {
-  //     isFirst = true;
-  //   }
-  //   chatId = widget.chatId;
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(() {
+      focusNode.unfocus();
+    });
+    if (widget.chatId == 'newChat') {
+      isFirst = true;
+    }
+    chatId = widget.chatId;
 
-  //   messageController.addListener(
-  //     () {
-  //       if (focusNode.hasFocus && messageController.text.isNotEmpty) {
-  //         setTyping(true);
-  //       } else if (!focusNode.hasFocus ||
-  //           (focusNode.hasFocus && messageController.text.isEmpty)) {
-  //         setTyping(false);
-  //       }
-  //     },
-  //   );
-  // }
+    // messageController.addListener(
+    //   () {
+    //     if (focusNode.hasFocus && messageController.text.isNotEmpty) {
+    //       setTyping(true);
+    //     } else if (!focusNode.hasFocus ||
+    //         (focusNode.hasFocus && messageController.text.isEmpty)) {
+    //       setTyping(false);
+    //     }
+    //   },
+    // );
+  }
 
   // setTyping(typing) {
   //   UserViewModel viewmodel =
@@ -68,146 +68,147 @@ class _ConversationState extends State<Conversation> {
     UserViewModel viewModel = Provider.of<UserViewModel>(context);
     viewModel.setUser();
     var user = Provider.of<UserViewModel>(context, listen: true).user;
-    return Consumer<ChatViewModel>(
-      builder: (BuildContext context, viewModel, Widget? child) {
-        return Scaffold(
-          key: viewModel.scaffoldKey,
-          appBar: AppBar(
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(Ionicons.chevron_back),
+    return SafeArea(
+      child: Consumer<ChatViewModel>(
+        builder: (BuildContext context, viewModel, Widget? child) {
+          return Scaffold(
+            key: viewModel.scaffoldKey,
+            appBar: AppBar(
+              leading: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(Ionicons.chevron_back),
+              ),
+              elevation: 0,
+              titleSpacing: 0,
+              title: buildUserName(),
             ),
-            elevation: 0,
-            titleSpacing: 0,
-            title: buildUserName(),
-          ),
-          body: Container(
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              children: [
-                Flexible(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: messageListStream(widget.chatId),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: circularProgress(context),
-                        );
-                      } else if (snapshot.hasData) {
-                        List messages = snapshot.data!.docs;
-                        // viewModel.setReadCount(
-                        //     widget.chatId, user, messages.length);
-                        return ListView.builder(
-                          controller: scrollController,
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          itemCount: messages.length,
-                          reverse: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            Message message = Message.fromJson(
-                                messages.reversed.toList()[index].data());
-                            return ChatBubbleWidget(
-                              message: message.content,
-                              time: message.time!,
-                              isMe: message.senderUid == user!.uid,
-                              type: message.type!,
-                            );
-                          },
-                        );
-                      } else {
-                        return Center(
-                          child: circularProgress(context),
-                        );
-                      }
-                    },
+            body: Container(
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                children: [
+                  Flexible(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: messageListStream(widget.chatId),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: circularProgress(context),
+                          );
+                        } else if (snapshot.hasData) {
+                          List messages = snapshot.data!.docs;
+                          // viewModel.setReadCount(
+                          //     widget.chatId, user, messages.length);
+                          return ListView.builder(
+                            controller: scrollController,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            itemCount: messages.length,
+                            reverse: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              Message message = Message.fromJson(
+                                  messages.reversed.toList()[index].data());
+                              return ChatBubbleWidget(
+                                message: message.content,
+                                time: message.time!,
+                                isMe: message.senderUid == user!.uid,
+                                type: message.type!,
+                              );
+                            },
+                          );
+                        } else {
+                          return Center(
+                            child: circularProgress(context),
+                          );
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: BottomAppBar(
-                    elevation: 10,
-                    child: Container(
-                      constraints: const BoxConstraints(maxHeight: 100),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          IconButton(
-                            icon: const Icon(CupertinoIcons.photo_on_rectangle),
-                            color: Theme.of(context).colorScheme.secondary,
-                            onPressed: () => showPhotoOptions(viewModel, user),
-                          ),
-                          Flexible(
-                            child: TextField(
-                              controller: messageController,
-                              focusNode: focusNode,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .headline6!
-                                    .color,
-                              ),
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(10),
-                                enabledBorder: InputBorder.none,
-                                border: InputBorder.none,
-                                hintText: 'Type your message',
-                                hintStyle: TextStyle(
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: BottomAppBar(
+                      elevation: 10,
+                      child: Container(
+                        constraints: const BoxConstraints(maxHeight: 100),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              icon:
+                                  const Icon(CupertinoIcons.photo_on_rectangle),
+                              color: Theme.of(context).colorScheme.secondary,
+                              onPressed: () =>
+                                  showPhotoOptions(viewModel, user),
+                            ),
+                            Flexible(
+                              child: TextField(
+                                controller: messageController,
+                                focusNode: focusNode,
+                                style: TextStyle(
+                                  fontSize: 15,
                                   color: Theme.of(context)
                                       .textTheme
                                       .headline6!
                                       .color,
                                 ),
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(10),
+                                  enabledBorder: InputBorder.none,
+                                  border: InputBorder.none,
+                                  hintText: 'Type your message',
+                                  hintStyle: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline6!
+                                        .color,
+                                  ),
+                                ),
+                                maxLines: null,
                               ),
-                              maxLines: null,
                             ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Ionicons.send,
-                              color: Theme.of(context).colorScheme.secondary,
+                            IconButton(
+                              icon: Icon(
+                                Ionicons.send,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                              onPressed: () {
+                                if (messageController.text.isNotEmpty) {
+                                  sendMessage(viewModel, user);
+                                }
+                              },
                             ),
-                            onPressed: () {
-                              if (messageController.text.isNotEmpty) {
-                                sendMessage(viewModel, user);
-                              }
-                            },
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
-  // _buildOnlineText(var user, bool isTyping) {
-  //   if (user.isOnline) {
-  //     if (isTyping) {
-  //       return 'typing...';
-  //     } else {
-  //       return 'online';
-  //     }
-  //   } else {
-  //     return 'last seen ${timeago.format(user.lastSeen.toDate())}';
-  //   }
-  // }
+  _buildOnlineText(var user, bool isTyping) {
+    if (user.isOnline) {
+      if (isTyping) {
+        return 'typing...';
+      } else {
+        return 'online';
+      }
+    } else {
+      return 'last seen ${timeago.format(user.lastSeen.toDate())}';
+    }
+  }
 
   buildUserName() {
     return StreamBuilder(
       stream: usersRef.doc(widget.userId).snapshots(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: circularProgress(context),
-          );
-        } else if (snapshot.hasData) {
+        if (snapshot.hasData) {
           DocumentSnapshot documentSnapshot =
               snapshot.data as DocumentSnapshot<Object?>;
           UserModel user = UserModel.fromJson(
@@ -250,36 +251,43 @@ class _ConversationState extends State<Conversation> {
                       Text(
                         user.username!,
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
                       ),
                       const SizedBox(height: 5),
-                      StreamBuilder(
-                        stream: chatRef.doc(widget.chatId).snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Center(
-                              child: circularProgress(context),
-                            );
-                          } else if (snapshot.hasData) {
-                            DocumentSnapshot? snap =
-                                snapshot.data as DocumentSnapshot<Object?>;
-                            Map? data = snap.data() as Map<String, dynamic>?;
-                            Map? usersTyping = data?['typing'] ?? {};
-                            // return Text(
-                            //   _buildOnlineText(
-                            //       user, usersTyping![widget.userId] ?? false),
-                            //   style: const TextStyle(
-                            //     fontWeight: FontWeight.w400,
-                            //     fontSize: 11,
-                            //   ),
-                            // );
-                            return Text('123');
-                          } else {
-                            return const SizedBox();
-                          }
-                        },
-                      ),
+                      Text(user.email!,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ))
+                      // StreamBuilder(
+                      //   stream: chatRef.doc(widget.chatId).snapshots(),
+                      //   builder: (context, snapshot) {
+                      //     if (snapshot.connectionState ==
+                      //         ConnectionState.waiting) {
+                      //       return Center(
+                      //         child: circularProgress(context),
+                      //       );
+                      //     } else if (snapshot.hasData) {
+                      //       DocumentSnapshot? snap =
+                      //           snapshot.data as DocumentSnapshot<Object?>;
+                      //       Map? data = snap.data() as Map<String, dynamic>?;
+                      //       Map? usersTyping = data?['typing'] ?? {};
+                      //       // return Text(
+                      //       //   _buildOnlineText(
+                      //       //       user, usersTyping![widget.userId] ?? false),
+                      //       //   style: const TextStyle(
+                      //       //     fontWeight: FontWeight.w400,
+                      //       //     fontSize: 11,
+                      //       //   ),
+                      //       // );
+                      //       return Text('123');
+                      //     } else {
+                      //       return const SizedBox();
+                      //     }
+                      //   },
+                      // ),
                     ],
                   ),
                 ),

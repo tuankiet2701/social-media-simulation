@@ -19,36 +19,38 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget build(BuildContext context) {
     ForgotPasswordViewModel forgotPasswordModel =
         Provider.of<ForgotPasswordViewModel>(context);
-    return LoadingOverlay(
-      isLoading: forgotPasswordModel.loading,
-      progressIndicator: circularProgress(context),
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-            children: [
-              SizedBox(height: MediaQuery.of(context).size.height / 8),
-              Container(
-                height: 170,
-                width: MediaQuery.of(context).size.width,
-                child: Image.asset(
-                  'assets/images/new1.png',
-                ),
-              ),
-              Center(
-                child: Text(
-                  'Input Email to Reset Your Password',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w300,
-                    color: Theme.of(context).colorScheme.secondary,
+    return SafeArea(
+      child: LoadingOverlay(
+        isLoading: forgotPasswordModel.loading,
+        progressIndicator: circularProgress(context),
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            body: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height / 8),
+                Container(
+                  height: 170,
+                  width: MediaQuery.of(context).size.width,
+                  child: Image.asset(
+                    'assets/images/new1.png',
                   ),
                 ),
-              ),
-              const SizedBox(height: 25),
-              buildForm(forgotPasswordModel, context),
-            ],
+                Center(
+                  child: Text(
+                    'Input Email to Reset Your Password',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w300,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 25),
+                buildForm(forgotPasswordModel, context),
+              ],
+            ),
           ),
         ),
       ),

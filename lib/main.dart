@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_simulation/components/life_cycle_event_handler.dart';
@@ -46,7 +45,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     WidgetsBinding.instance.addObserver(LifeCycleEventHandler(
       detachedCallBack: () => UserService().setUserStatus(false),
-      resumeCallBack: () => UserService().setUserStatus(false),
+      resumeCallBack: () => UserService().setUserStatus(true),
     ));
   }
 

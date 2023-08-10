@@ -28,86 +28,88 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     EditProfileViewModel editProfileModel =
         Provider.of<EditProfileViewModel>(context);
-    return LoadingOverlay(
-      progressIndicator: circularProgress(context),
-      isLoading: editProfileModel.loading,
-      child: Scaffold(
-        key: editProfileModel.scaffoldKey,
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text('Edit Profile'),
-          actions: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 25),
-                child: GestureDetector(
-                  onTap: () => editProfileModel.EditProfile(context),
-                  child: Text(
-                    'Save',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 15,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        body: ListView(
-          children: [
-            Center(
-              child: GestureDetector(
-                onTap: () => editProfileModel.pickImage(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.transparent,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        offset: const Offset(0, 0),
-                        blurRadius: 2,
-                        spreadRadius: 0,
+    return SafeArea(
+      child: LoadingOverlay(
+        progressIndicator: circularProgress(context),
+        isLoading: editProfileModel.loading,
+        child: Scaffold(
+          key: editProfileModel.scaffoldKey,
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text('Edit Profile'),
+            actions: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 25),
+                  child: GestureDetector(
+                    onTap: () => editProfileModel.EditProfile(context),
+                    child: Text(
+                      'Save',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 15,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
-                    ],
+                    ),
                   ),
-                  child: editProfileModel.imgLink != null
-                      ? Padding(
-                          padding: const EdgeInsets.all(1),
-                          child: CircleAvatar(
-                            radius: 65,
-                            backgroundImage:
-                                NetworkImage(editProfileModel.imgLink!),
-                          ),
-                        )
-                      : editProfileModel.image == null
-                          ? Padding(
-                              padding: const EdgeInsets.all(1),
-                              child: CircleAvatar(
-                                radius: 65,
-                                backgroundImage:
-                                    NetworkImage(widget.user!.photoUrl!),
-                              ),
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.all(1),
-                              child: CircleAvatar(
-                                radius: 65,
-                                backgroundImage:
-                                    FileImage(editProfileModel.image!),
-                              ),
-                            ),
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            buildForm(editProfileModel, context),
-          ],
+            ],
+          ),
+          body: ListView(
+            children: [
+              Center(
+                child: GestureDetector(
+                  onTap: () => editProfileModel.pickImage(),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.transparent,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          offset: const Offset(0, 0),
+                          blurRadius: 2,
+                          spreadRadius: 0,
+                        ),
+                      ],
+                    ),
+                    child: editProfileModel.imgLink != null
+                        ? Padding(
+                            padding: const EdgeInsets.all(1),
+                            child: CircleAvatar(
+                              radius: 65,
+                              backgroundImage:
+                                  NetworkImage(editProfileModel.imgLink!),
+                            ),
+                          )
+                        : editProfileModel.image == null
+                            ? Padding(
+                                padding: const EdgeInsets.all(1),
+                                child: CircleAvatar(
+                                  radius: 65,
+                                  backgroundImage:
+                                      NetworkImage(widget.user!.photoUrl!),
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.all(1),
+                                child: CircleAvatar(
+                                  radius: 65,
+                                  backgroundImage:
+                                      FileImage(editProfileModel.image!),
+                                ),
+                              ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              buildForm(editProfileModel, context),
+            ],
+          ),
         ),
       ),
     );

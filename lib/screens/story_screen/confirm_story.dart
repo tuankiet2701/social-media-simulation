@@ -27,95 +27,97 @@ class _ConfirmStoryState extends State<ConfirmStory> {
   @override
   Widget build(BuildContext context) {
     StoryViewModel viewModel = Provider.of<StoryViewModel>(context);
-    return Scaffold(
-      body: LoadingOverlay(
-        isLoading: loading,
-        progressIndicator: circularProgress(context),
-        child: Center(
-          child: AspectRatio(
-            aspectRatio: 9 / 16,
-            child: Image.file(viewModel.mediaUrl!),
-          ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 10,
-        child: Container(
-          constraints: BoxConstraints(maxHeight: 100),
-          child: Flexible(
-            child: TextFormField(
-              style: TextStyle(
-                fontSize: 15,
-                color: Theme.of(context).textTheme.headline6!.color,
-              ),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(10),
-                enabledBorder: InputBorder.none,
-                border: InputBorder.none,
-                hintText: 'Type your caption',
-                hintStyle: TextStyle(
-                  color: Theme.of(context).textTheme.headline6!.color,
-                ),
-              ),
-              onSaved: (val) {
-                viewModel.setDescription(val!);
-              },
-              onChanged: (val) {
-                viewModel.setDescription(val);
-              },
-              maxLines: null,
+    return SafeArea(
+      child: Scaffold(
+        body: LoadingOverlay(
+          isLoading: loading,
+          progressIndicator: circularProgress(context),
+          child: Center(
+            child: AspectRatio(
+              aspectRatio: 9 / 16,
+              child: Image.file(viewModel.mediaUrl!),
             ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.done,
-          color: Colors.white,
+        bottomNavigationBar: BottomAppBar(
+          elevation: 10,
+          child: Container(
+            constraints: BoxConstraints(maxHeight: 100),
+            child: Flexible(
+              child: TextFormField(
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Theme.of(context).textTheme.headline6!.color,
+                ),
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(10),
+                  enabledBorder: InputBorder.none,
+                  border: InputBorder.none,
+                  hintText: 'Type your caption',
+                  hintStyle: TextStyle(
+                    color: Theme.of(context).textTheme.headline6!.color,
+                  ),
+                ),
+                onSaved: (val) {
+                  viewModel.setDescription(val!);
+                },
+                onChanged: (val) {
+                  viewModel.setDescription(val);
+                },
+                maxLines: null,
+              ),
+            ),
+          ),
         ),
-        onPressed: () async {
-          setState(() {
-            loading = true;
-          });
-          //check if user has uploaded a story
-          QuerySnapshot snapshot = await storyRef
-              .where('userId', isEqualTo: firebaseAuth.currentUser!.uid)
-              .get();
-          if (snapshot.docs.isNotEmpty) {
-            List chatList = snapshot.docs;
-            DocumentSnapshot chatListSnapshot = chatList[0];
-            String url = await uploadMedia(viewModel.mediaUrl!);
-            StoryModel message = StoryModel(
-              url: url,
-              caption: viewModel.description ?? '',
-              type: MessageType.IMAGE,
-              time: Timestamp.now(),
-              storyId: uuid.v1(),
-              viewers: [],
-            );
-            await viewModel.sendStory(chatListSnapshot.id, message);
+        floatingActionButton: FloatingActionButton(
+          child: Icon(
+            Icons.done,
+            color: Colors.white,
+          ),
+          onPressed: () async {
             setState(() {
-              loading = false;
+              loading = true;
             });
-            Navigator.pop(context);
-          } else {
-            String url = await uploadMedia(viewModel.mediaUrl!);
-            StoryModel message = StoryModel(
-              url: url,
-              caption: viewModel.description ?? '',
-              type: MessageType.IMAGE,
-              time: Timestamp.now(),
-              storyId: uuid.v1(),
-              viewers: [],
-            );
-            String id = await viewModel.sendFirstStory(message);
-            await viewModel.sendStory(id, message);
-            setState(() {
-              loading = false;
-            });
-            Navigator.pop(context);
-          }
-        },
+            //check if user has uploaded a story
+            QuerySnapshot snapshot = await storyRef
+                .where('userId', isEqualTo: firebaseAuth.currentUser!.uid)
+                .get();
+            if (snapshot.docs.isNotEmpty) {
+              List chatList = snapshot.docs;
+              DocumentSnapshot chatListSnapshot = chatList[0];
+              String url = await uploadMedia(viewModel.mediaUrl!);
+              StoryModel message = StoryModel(
+                url: url,
+                caption: viewModel.description ?? '',
+                type: MessageType.IMAGE,
+                time: Timestamp.now(),
+                storyId: uuid.v1(),
+                viewers: [],
+              );
+              await viewModel.sendStory(chatListSnapshot.id, message);
+              setState(() {
+                loading = false;
+              });
+              Navigator.pop(context);
+            } else {
+              String url = await uploadMedia(viewModel.mediaUrl!);
+              StoryModel message = StoryModel(
+                url: url,
+                caption: viewModel.description ?? '',
+                type: MessageType.IMAGE,
+                time: Timestamp.now(),
+                storyId: uuid.v1(),
+                viewers: [],
+              );
+              String id = await viewModel.sendFirstStory(message);
+              await viewModel.sendStory(id, message);
+              setState(() {
+                loading = false;
+              });
+              Navigator.pop(context);
+            }
+          },
+        ),
       ),
     );
   }

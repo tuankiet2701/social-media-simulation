@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_simulation/components/stream_grid_wrapper.dart';
 import 'package:social_media_simulation/models/post.dart';
 import 'package:social_media_simulation/models/user.dart';
@@ -13,6 +14,7 @@ import 'package:social_media_simulation/screens/profile_screen/list_posts/list_p
 import 'package:social_media_simulation/screens/setting_screen/setting_screen.dart';
 import 'package:social_media_simulation/utils/constants.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
+import 'package:social_media_simulation/view_model/login_view_model/login_view_model.dart';
 import 'package:social_media_simulation/widgets/post_tile.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -40,6 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
+    super.initState();
     checkIfFollowing();
   }
 
@@ -56,359 +59,369 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          Constants.appName,
-          style: TextStyle(fontWeight: FontWeight.w900),
-        ),
-        actions: [
-          widget.profileId == firebaseAuth.currentUser!.uid
-              ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 25),
-                    child: GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            title: const Text(
-                              'Log Out',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            Constants.appName,
+            style: TextStyle(fontWeight: FontWeight.w900),
+          ),
+          actions: [
+            widget.profileId == firebaseAuth.currentUser!.uid
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 25),
+                      child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                            ),
-                            content: const Text(
-                              'Are you sure?',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w900,
+                              title: const Text(
+                                'Log Out',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () async {
-                                  await firebaseAuth.signOut();
-                                  Navigator.of(context).pushReplacement(
-                                    CupertinoPageRoute(
-                                      builder: (_) => const LoginScreen(),
+                              content: const Text(
+                                'Are you sure?',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () async {
+                                    // await firebaseAuth.signOut();
+                                    // Navigator.of(context).pushReplacement(
+                                    //   CupertinoPageRoute(
+                                    //     builder: (_) => const LoginScreen(),
+                                    //   ),
+                                    // );
+                                    Provider.of<LoginViewModel>(context,
+                                            listen: false)
+                                        .signOut(context);
+                                  },
+                                  child: const Text(
+                                    'Yes',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w900,
                                     ),
-                                  );
-                                },
-                                child: const Text(
-                                  'Yes',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w900,
                                   ),
                                 ),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: const Text(
-                                  'No',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w900,
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: const Text(
+                                    'No',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w900,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Log Out',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15,
                           ),
-                        );
-                      },
-                      child: const Text(
-                        'Log Out',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w900,
-                          fontSize: 15,
                         ),
                       ),
                     ),
-                  ),
-                )
-              : SizedBox(),
-        ],
-      ),
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            pinned: true,
-            floating: false,
-            toolbarHeight: 5,
-            collapsedHeight: 6,
-            expandedHeight: 225,
-            flexibleSpace: FlexibleSpaceBar(
-              background: StreamBuilder(
-                stream: usersRef.doc(widget.profileId).snapshots(),
-                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.hasData) {
-                    UserModel user = UserModel.fromJson(
-                        snapshot.data!.data() as Map<String, dynamic>);
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: user.photoUrl!.isEmpty
-                                  ? CircleAvatar(
-                                      radius: 40,
-                                      backgroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      child: Center(
-                                        child: Text(
-                                          '${user.username![0].toUpperCase}',
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w900,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : CircleAvatar(
-                                      radius: 40,
-                                      backgroundImage:
-                                          CachedNetworkImageProvider(
-                                        '${user.photoUrl}',
-                                      ),
-                                    ),
-                            ),
-                            const SizedBox(width: 20),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 32),
-                                Row(
-                                  children: [
-                                    const Visibility(
-                                      visible: false,
-                                      child: SizedBox(width: 10),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          width: 130,
+                  )
+                : SizedBox(),
+          ],
+        ),
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              pinned: true,
+              floating: false,
+              toolbarHeight: 5,
+              collapsedHeight: 6,
+              expandedHeight: 225,
+              flexibleSpace: FlexibleSpaceBar(
+                background: StreamBuilder(
+                  stream: usersRef.doc(widget.profileId).snapshots(),
+                  builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    if (snapshot.hasData) {
+                      UserModel user = UserModel.fromJson(
+                          snapshot.data!.data() as Map<String, dynamic>);
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: user.photoUrl!.isEmpty
+                                    ? CircleAvatar(
+                                        radius: 40,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                        child: Center(
                                           child: Text(
-                                            user.username!,
+                                            '${user.username![0].toUpperCase}',
                                             style: const TextStyle(
+                                              color: Colors.white,
                                               fontSize: 15,
                                               fontWeight: FontWeight.w900,
                                             ),
-                                            maxLines: null,
                                           ),
                                         ),
-                                        const SizedBox(width: 10.0),
-                                        Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              user.email!,
-                                              style:
-                                                  const TextStyle(fontSize: 10),
-                                            ),
-                                          ],
+                                      )
+                                    : CircleAvatar(
+                                        radius: 40,
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(
+                                          '${user.photoUrl}',
                                         ),
-                                      ],
-                                    ),
-                                    const SizedBox(width: 20.0),
-                                    widget.profileId == currentUserId()
-                                        ? InkWell(
-                                            onTap: () {
-                                              Navigator.of(context).push(
-                                                CupertinoPageRoute(
-                                                  builder: (_) =>
-                                                      const SettingScreen(),
-                                                ),
-                                              );
-                                            },
-                                            child: Column(
-                                              children: [
-                                                Icon(
-                                                  Ionicons.settings_outline,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .secondary,
-                                                ),
-                                                const Text(
-                                                  'Settings',
-                                                  style: TextStyle(
-                                                    fontSize: 11.5,
-                                                  ),
-                                                ),
-                                              ],
+                                      ),
+                              ),
+                              const SizedBox(width: 20),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: 32),
+                                  Row(
+                                    children: [
+                                      const Visibility(
+                                        visible: false,
+                                        child: SizedBox(width: 10),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: 130,
+                                            child: Text(
+                                              user.username!,
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w900,
+                                              ),
+                                              maxLines: null,
                                             ),
-                                          )
-                                        : const Text(''),
-                                  ],
-                                ),
-                              ],
+                                          ),
+                                          const SizedBox(width: 10.0),
+                                          Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                user.email!,
+                                                style: const TextStyle(
+                                                    fontSize: 10),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(width: 20.0),
+                                      widget.profileId == currentUserId()
+                                          ? InkWell(
+                                              onTap: () {
+                                                Navigator.of(context).push(
+                                                  CupertinoPageRoute(
+                                                    builder: (_) =>
+                                                        const SettingScreen(),
+                                                  ),
+                                                );
+                                              },
+                                              child: Column(
+                                                children: [
+                                                  Icon(
+                                                    Ionicons.settings_outline,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .secondary,
+                                                  ),
+                                                  const Text(
+                                                    'Settings',
+                                                    style: TextStyle(
+                                                      fontSize: 11.5,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          : const Text(''),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10, left: 20),
+                            child: user.bio!.isEmpty
+                                ? Container()
+                                : Container(
+                                    width: 200,
+                                    child: Text(
+                                      user.bio!,
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                  ),
+                          ),
+                          const SizedBox(height: 10),
+                          Container(
+                            height: 50,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  StreamBuilder(
+                                    stream: postRef
+                                        .where('ownerId',
+                                            isEqualTo: widget.profileId)
+                                        .snapshots(),
+                                    builder: (context,
+                                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                                      if (snapshot.hasData) {
+                                        QuerySnapshot<Object?>? snap =
+                                            snapshot.data;
+                                        List<DocumentSnapshot> docs =
+                                            snap!.docs;
+                                        return buildCount("POSTS", docs.length);
+                                      } else {
+                                        return buildCount("POSTS", 0);
+                                      }
+                                    },
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 15),
+                                    child: Container(
+                                      height: 50,
+                                      width: 0.3,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  StreamBuilder(
+                                    stream: followersRef
+                                        .doc(widget.profileId)
+                                        .collection('userFollowers')
+                                        .snapshots(),
+                                    builder: (context,
+                                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                                      if (snapshot.hasData) {
+                                        QuerySnapshot<Object?>? snap =
+                                            snapshot.data;
+                                        List<DocumentSnapshot> docs =
+                                            snap!.docs;
+                                        return buildCount(
+                                            "FOLLOWERS", docs.length);
+                                      } else {
+                                        return buildCount("FOLLOWERS", 0);
+                                      }
+                                    },
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 15),
+                                    child: Container(
+                                      height: 50,
+                                      width: 0.3,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  StreamBuilder(
+                                    stream: followingRef
+                                        .doc(widget.profileId)
+                                        .collection('userFollowing')
+                                        .snapshots(),
+                                    builder: (context,
+                                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                                      if (snapshot.hasData) {
+                                        QuerySnapshot<Object?>? snap =
+                                            snapshot.data;
+                                        List<DocumentSnapshot> docs =
+                                            snap!.docs;
+                                        return buildCount(
+                                            "FOLLOWING", docs.length);
+                                      } else {
+                                        return buildCount("FOLLOWING", 0);
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          buildProfileButton(user),
+                        ],
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  if (index > 0) return null;
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children: [
+                            const Text(
+                              'All Posts',
+                              style: TextStyle(fontWeight: FontWeight.w900),
+                            ),
+                            const Spacer(),
+                            IconButton(
+                              onPressed: () async {
+                                DocumentSnapshot doc =
+                                    await usersRef.doc(widget.profileId).get();
+                                var currentUser = UserModel.fromJson(
+                                    doc.data() as Map<String, dynamic>);
+                                Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => ListPosts(
+                                      userId: widget.profileId,
+                                      username: currentUser.username,
+                                    ),
+                                  ),
+                                );
+                              },
+                              icon: Icon(Ionicons.grid_outline),
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10, left: 20),
-                          child: user.bio!.isEmpty
-                              ? Container()
-                              : Container(
-                                  width: 200,
-                                  child: Text(
-                                    user.bio!,
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    maxLines: 2,
-                                  ),
-                                ),
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          height: 50,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                                StreamBuilder(
-                                  stream: postRef
-                                      .where('ownerId',
-                                          isEqualTo: widget.profileId)
-                                      .snapshots(),
-                                  builder: (context,
-                                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                                    if (snapshot.hasData) {
-                                      QuerySnapshot<Object?>? snap =
-                                          snapshot.data;
-                                      List<DocumentSnapshot> docs = snap!.docs;
-                                      return buildCount("POSTS", docs.length);
-                                    } else {
-                                      return buildCount("POSTS", 0);
-                                    }
-                                  },
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 15),
-                                  child: Container(
-                                    height: 50,
-                                    width: 0.3,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                StreamBuilder(
-                                  stream: followersRef
-                                      .doc(widget.profileId)
-                                      .collection('userFollowers')
-                                      .snapshots(),
-                                  builder: (context,
-                                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                                    if (snapshot.hasData) {
-                                      QuerySnapshot<Object?>? snap =
-                                          snapshot.data;
-                                      List<DocumentSnapshot> docs = snap!.docs;
-                                      return buildCount(
-                                          "FOLLOWERS", docs.length);
-                                    } else {
-                                      return buildCount("FOLLOWERS", 0);
-                                    }
-                                  },
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 15),
-                                  child: Container(
-                                    height: 50,
-                                    width: 0.3,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                StreamBuilder(
-                                  stream: followingRef
-                                      .doc(widget.profileId)
-                                      .collection('userFollowing')
-                                      .snapshots(),
-                                  builder: (context,
-                                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                                    if (snapshot.hasData) {
-                                      QuerySnapshot<Object?>? snap =
-                                          snapshot.data;
-                                      List<DocumentSnapshot> docs = snap!.docs;
-                                      return buildCount(
-                                          "FOLLOWING", docs.length);
-                                    } else {
-                                      return buildCount("FOLLOWING", 0);
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        buildProfileButton(user),
-                      ],
-                    );
-                  }
-                  return Container();
+                      ),
+                      buildPostView(),
+                    ],
+                  );
                 },
               ),
             ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                if (index > 0) return null;
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        children: [
-                          const Text(
-                            'All Posts',
-                            style: TextStyle(fontWeight: FontWeight.w900),
-                          ),
-                          const Spacer(),
-                          IconButton(
-                            onPressed: () async {
-                              DocumentSnapshot doc =
-                                  await usersRef.doc(widget.profileId).get();
-                              var currentUser = UserModel.fromJson(
-                                  doc.data() as Map<String, dynamic>);
-                              Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => ListPosts(
-                                    userId: widget.profileId,
-                                    username: currentUser.username,
-                                  ),
-                                ),
-                              );
-                            },
-                            icon: Icon(Ionicons.grid_outline),
-                          ),
-                        ],
-                      ),
-                    ),
-                    buildPostView(),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

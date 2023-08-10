@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:social_media_simulation/screens/edit_profile_screen/edit_profile_screen.dart';
+import 'package:social_media_simulation/screens/login_screen/login_screen.dart';
 import 'package:social_media_simulation/screens/main_screen/main_screen.dart';
-import 'package:social_media_simulation/screens/profile_screen/profile_screen.dart';
 import 'package:social_media_simulation/services/auth_service.dart';
+import 'package:social_media_simulation/utils/firebase.dart';
 import 'package:social_media_simulation/widgets/showInSnackbar.dart';
 
 class LoginViewModel extends ChangeNotifier {
@@ -45,6 +45,16 @@ class LoginViewModel extends ChangeNotifier {
         showInSnackBar(auth.handleFirebaseAuthError(e.toString()), context);
       }
     }
+  }
+
+  signOut(BuildContext context) async {
+    firebaseAuth.signOut();
+    Navigator.of(context).pushReplacement(
+      CupertinoPageRoute(
+        builder: (_) => const LoginScreen(),
+      ),
+    );
+    loading = false;
   }
 
   setEmail(val) {

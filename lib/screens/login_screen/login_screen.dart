@@ -22,68 +22,70 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     LoginViewModel loginModel = Provider.of<LoginViewModel>(context);
-    return LoadingOverlay(
-      progressIndicator: circularProgress(context),
-      isLoading: loginModel.loading,
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          key: loginModel.scaffoldKey,
-          body: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-            children: [
-              SizedBox(height: MediaQuery.of(context).size.height / 10),
-              Container(
-                height: 170,
-                width: MediaQuery.of(context).size.width,
-                child: Image.asset(
-                  'assets/images/new1.png',
-                ),
-              ),
-              const Center(
-                child: Text(
-                  'Welcome Back!',
-                  style: TextStyle(
-                    fontSize: 23,
-                    fontWeight: FontWeight.w900,
+    return SafeArea(
+      child: LoadingOverlay(
+        progressIndicator: circularProgress(context),
+        isLoading: loginModel.loading,
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            key: loginModel.scaffoldKey,
+            body: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height / 10),
+                Container(
+                  height: 170,
+                  width: MediaQuery.of(context).size.width,
+                  child: Image.asset(
+                    'assets/images/new1.png',
                   ),
                 ),
-              ),
-              Center(
-                child: Text(
-                  'Login your account and get started!',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w300,
-                    color: Theme.of(context).colorScheme.secondary,
+                const Center(
+                  child: Text(
+                    'Welcome Back!',
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 30),
-              buildForm(loginModel, context),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Don\'t have an account?'),
-                  const SizedBox(width: 5),
-                  GestureDetector(
-                    child: Text(
-                      'Sign Up',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
+                Center(
+                  child: Text(
+                    'Login your account and get started!',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w300,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
-                    onTap: () => Navigator.of(context).pushReplacement(
-                      CupertinoPageRoute(
-                        builder: (_) => const RegisterScreen(),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                buildForm(loginModel, context),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Don\'t have an account?'),
+                    const SizedBox(width: 5),
+                    GestureDetector(
+                      child: Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              )
-            ],
+                      onTap: () => Navigator.of(context).push(
+                        CupertinoPageRoute(
+                          builder: (_) => const RegisterScreen(),
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

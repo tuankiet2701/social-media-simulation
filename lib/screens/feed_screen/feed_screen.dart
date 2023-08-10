@@ -41,87 +41,89 @@ class _FeedScreenState extends State<FeedScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          Constants.appName,
-          style: TextStyle(fontWeight: FontWeight.w900),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Ionicons.chatbubble_ellipses,
-              size: 30,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (_) => RecentChatsScreen(),
-                ),
-              );
-            },
+    return SafeArea(
+      child: Scaffold(
+        key: scaffoldKey,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(
+            Constants.appName,
+            style: TextStyle(fontWeight: FontWeight.w900),
           ),
-          const SizedBox(width: 20)
-        ],
-      ),
-      body: RefreshIndicator(
-        color: Theme.of(context).colorScheme.secondary,
-        onRefresh: () =>
-            postRef.orderBy('timestamp', descending: true).limit(page).get(),
-        child: SingleChildScrollView(
-          physics: const NeverScrollableScrollPhysics(),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const StoryWidget(),
-              Container(
-                height: MediaQuery.of(context).size.height - 220,
-                child: StreamBuilder(
-                  stream: firestore
-                      .collection('posts')
-                      .orderBy('timestamp', descending: true)
-                      .snapshots(),
-                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: circularProgress(context),
-                      );
-                    } else if (snapshot.hasData) {
-                      var snap = snapshot.data;
-                      List docs = snap!.docs;
-                      return ListView.builder(
-                        itemCount: docs.length,
-                        // controller: scrollController,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          PostModel posts =
-                              PostModel.fromJson(docs[index].data());
-                          return Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: UserPost(post: posts),
-                          );
-                        },
-                      );
-                    } else {
-                      return const Center(
-                        child: Text(
-                          'No Feeds',
-                          style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                ),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Ionicons.chatbubble_ellipses,
+                size: 30,
               ),
-            ],
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (_) => RecentChatsScreen(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(width: 20)
+          ],
+        ),
+        body: RefreshIndicator(
+          color: Theme.of(context).colorScheme.secondary,
+          onRefresh: () =>
+              postRef.orderBy('timestamp', descending: true).limit(page).get(),
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const StoryWidget(),
+                Container(
+                  height: MediaQuery.of(context).size.height - 220,
+                  child: StreamBuilder(
+                    stream: firestore
+                        .collection('posts')
+                        .orderBy('timestamp', descending: true)
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: circularProgress(context),
+                        );
+                      } else if (snapshot.hasData) {
+                        var snap = snapshot.data;
+                        List docs = snap!.docs;
+                        return ListView.builder(
+                          itemCount: docs.length,
+                          // controller: scrollController,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            PostModel posts =
+                                PostModel.fromJson(docs[index].data());
+                            return Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: UserPost(post: posts),
+                            );
+                          },
+                        );
+                      } else {
+                        return const Center(
+                          child: Text(
+                            'No Feeds',
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -26,160 +26,162 @@ class _CreatePostState extends State<CreatePost> {
     }
 
     PostViewModel viewModel = Provider.of<PostViewModel>(context);
-    return WillPopScope(
-      onWillPop: () async {
-        await viewModel.resetPost();
-        return true;
-      },
-      child: LoadingOverlay(
-        progressIndicator: circularProgress(context),
-        isLoading: viewModel.loading,
-        child: Scaffold(
-          key: viewModel.scaffoldKey,
-          appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(Ionicons.close_outline),
-              onPressed: () {
-                viewModel.resetPost();
-                Navigator.pop(context);
-              },
-            ),
-            title: Text(
-              Constants.appName,
-              style: TextStyle(fontWeight: FontWeight.w900),
-            ),
-            centerTitle: true,
-            actions: [
-              GestureDetector(
-                onTap: () async {
-                  await viewModel.uploadPosts(context);
-                  Navigator.pop(context);
+    return SafeArea(
+      child: WillPopScope(
+        onWillPop: () async {
+          await viewModel.resetPost();
+          return true;
+        },
+        child: LoadingOverlay(
+          progressIndicator: circularProgress(context),
+          isLoading: viewModel.loading,
+          child: Scaffold(
+            key: viewModel.scaffoldKey,
+            appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Ionicons.close_outline),
+                onPressed: () {
                   viewModel.resetPost();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Text(
-                    'Post'.toUpperCase(),
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 15,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-          body: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            children: [
-              const SizedBox(height: 15),
-              StreamBuilder(
-                stream: usersRef.doc(currentUserId()).snapshots(),
-                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.hasData) {
-                    UserModel user = UserModel.fromJson(
-                        snapshot.data!.data() as Map<String, dynamic>);
-                    return ListTile(
-                      leading: CircleAvatar(
-                        radius: 25,
-                        backgroundImage: NetworkImage(user.photoUrl!),
-                      ),
-                      title: Text(
-                        user.username!,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(user.email!),
-                    );
-                  }
-                  return Container();
+                  Navigator.pop(context);
                 },
               ),
-              InkWell(
-                onTap: () => showImageChoice(context, viewModel),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width - 30,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.secondary,
+              title: Text(
+                Constants.appName,
+                style: TextStyle(fontWeight: FontWeight.w900),
+              ),
+              centerTitle: true,
+              actions: [
+                GestureDetector(
+                  onTap: () async {
+                    await viewModel.uploadPosts(context);
+                    Navigator.pop(context);
+                    viewModel.resetPost();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(
+                      'Post'.toUpperCase(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 15,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
                   ),
-                  child: viewModel.imgLink != null
-                      ? CustomImage(
-                          imageUrl: viewModel.imgLink,
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.width - 30,
-                          fit: BoxFit.cover,
-                        )
-                      : viewModel.mediaUrl == null
-                          ? Center(
-                              child: Text(
-                                'Upload a Photo',
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
+                )
+              ],
+            ),
+            body: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              children: [
+                const SizedBox(height: 15),
+                StreamBuilder(
+                  stream: usersRef.doc(currentUserId()).snapshots(),
+                  builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    if (snapshot.hasData) {
+                      UserModel user = UserModel.fromJson(
+                          snapshot.data!.data() as Map<String, dynamic>);
+                      return ListTile(
+                        leading: CircleAvatar(
+                          radius: 25,
+                          backgroundImage: NetworkImage(user.photoUrl!),
+                        ),
+                        title: Text(
+                          user.username!,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(user.email!),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                InkWell(
+                  onTap: () => showImageChoice(context, viewModel),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width - 30,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    child: viewModel.imgLink != null
+                        ? CustomImage(
+                            imageUrl: viewModel.imgLink,
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.width - 30,
+                            fit: BoxFit.cover,
+                          )
+                        : viewModel.mediaUrl == null
+                            ? Center(
+                                child: Text(
+                                  'Upload a Photo',
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
                                 ),
+                              )
+                            : Image.file(
+                                viewModel.mediaUrl!,
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.width - 30,
+                                fit: BoxFit.cover,
                               ),
-                            )
-                          : Image.file(
-                              viewModel.mediaUrl!,
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.width - 30,
-                              fit: BoxFit.cover,
-                            ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'Post Caption'.toUpperCase(),
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
+                const SizedBox(height: 20),
+                Text(
+                  'Post Caption'.toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              TextFormField(
-                initialValue: viewModel.description,
-                decoration: const InputDecoration(
-                  hintText: 'Write a caption',
-                  focusedBorder: UnderlineInputBorder(),
+                TextFormField(
+                  initialValue: viewModel.description,
+                  decoration: const InputDecoration(
+                    hintText: 'Write a caption',
+                    focusedBorder: UnderlineInputBorder(),
+                  ),
+                  maxLines: null,
+                  onChanged: (value) => viewModel.setDescription(value),
                 ),
-                maxLines: null,
-                onChanged: (value) => viewModel.setDescription(value),
-              ),
-              // const SizedBox(height: 20),
-              // Text(
-              //   'Location'.toUpperCase(),
-              //   style: const TextStyle(
-              //     fontSize: 15,
-              //     fontWeight: FontWeight.w600,
-              //   ),
-              // ),
-              // ListTile(
-              //   contentPadding: EdgeInsets.all(0),
-              //   title: Container(
-              //     width: 250,
-              //     child: TextFormField(
-              //       controller: viewModel.locationTEC,
-              //       decoration: const InputDecoration(
-              //           contentPadding: EdgeInsets.all(0),
-              //           hintText: 'Ho Chi Minh, Viet Nam!',
-              //           focusedBorder: UnderlineInputBorder()),
-              //       maxLines: null,
-              //       onChanged: (value) => viewModel.setLocation(value),
-              //     ),
-              //   ),
-              //   trailing: IconButton(
-              //     tooltip: 'Use your current location',
-              //     icon: const Icon(CupertinoIcons.map_pin_ellipse, size: 25),
-              //     iconSize: 30,
-              //     color: Theme.of(context).colorScheme.secondary,
-              //     onPressed: () => viewModel.getLocation(),
-              //   ),
-              // ),
-            ],
+                // const SizedBox(height: 20),
+                // Text(
+                //   'Location'.toUpperCase(),
+                //   style: const TextStyle(
+                //     fontSize: 15,
+                //     fontWeight: FontWeight.w600,
+                //   ),
+                // ),
+                // ListTile(
+                //   contentPadding: EdgeInsets.all(0),
+                //   title: Container(
+                //     width: 250,
+                //     child: TextFormField(
+                //       controller: viewModel.locationTEC,
+                //       decoration: const InputDecoration(
+                //           contentPadding: EdgeInsets.all(0),
+                //           hintText: 'Ho Chi Minh, Viet Nam!',
+                //           focusedBorder: UnderlineInputBorder()),
+                //       maxLines: null,
+                //       onChanged: (value) => viewModel.setLocation(value),
+                //     ),
+                //   ),
+                //   trailing: IconButton(
+                //     tooltip: 'Use your current location',
+                //     icon: const Icon(CupertinoIcons.map_pin_ellipse, size: 25),
+                //     iconSize: 30,
+                //     color: Theme.of(context).colorScheme.secondary,
+                //     onPressed: () => viewModel.getLocation(),
+                //   ),
+                // ),
+              ],
+            ),
           ),
         ),
       ),
