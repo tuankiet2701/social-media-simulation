@@ -38,10 +38,10 @@ class StoryWidget extends StatelessWidget {
                           StoryModel story = StoryModel.fromJson(
                             stories.first.data(),
                           );
-                          List users = storyListSnapshot.get('whoCanSee');
+                          // List users = storyListSnapshot.get('whoCanSee');
                           // remove the current user's id from the Users
                           // list so we can get the rest of the user's id
-                          users.remove(firebaseAuth.currentUser!.uid);
+                          // users.remove(firebaseAuth.currentUser!.uid);
                           return _buildstoryAvatar(
                             storyListSnapshot.get('userId'),
                             storyListSnapshot.id,

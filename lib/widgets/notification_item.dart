@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_simulation/models/notification.dart';
+import 'package:social_media_simulation/models/post.dart';
+import 'package:social_media_simulation/models/user.dart';
 import 'package:social_media_simulation/screens/profile_screen/profile_screen.dart';
 import 'package:social_media_simulation/utils/firebase.dart';
 import 'package:social_media_simulation/widgets/indicator.dart';
@@ -10,7 +12,9 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class NotificationItem extends StatefulWidget {
   final NotificationModel? notifications;
-  const NotificationItem({super.key, this.notifications});
+  final UserModel? user;
+  final PostModel? post;
+  const NotificationItem({super.key, this.notifications, this.user, this.post});
 
   @override
   State<NotificationItem> createState() => _NotificationItemState();
@@ -27,7 +31,7 @@ class _NotificationItemState extends State<NotificationItem> {
         delete();
       },
       child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
         onTap: () {
           Navigator.push(
             context,
@@ -60,7 +64,7 @@ class _NotificationItemState extends State<NotificationItem> {
         title: RichText(
           overflow: TextOverflow.ellipsis,
           text: TextSpan(
-            style: TextStyle(color: Colors.black, fontSize: 14),
+            style: const TextStyle(color: Colors.black, fontSize: 14),
             children: [
               TextSpan(
                 text: widget.notifications!.username!,
@@ -84,6 +88,19 @@ class _NotificationItemState extends State<NotificationItem> {
             ],
           ),
         ),
+        subtitle: Text(
+          timeago.format(widget.notifications!.timestamp!.toDate()),
+          style: const TextStyle(fontSize: 12),
+        ),
+        trailing: widget.notifications!.type == "like" ||
+                widget.notifications!.type == "comment"
+            ? CircleAvatar(
+                radius: 30,
+                backgroundImage: CachedNetworkImageProvider(
+                  widget.notifications!.mediaUrl!,
+                ),
+              )
+            : null,
       ),
     );
   }
@@ -116,7 +133,7 @@ class _NotificationItemState extends State<NotificationItem> {
         widget.notifications!.type == 'comment') {
       return buildPreviewImage();
     } else {
-      return Text('');
+      return const Text('');
     }
   }
 
